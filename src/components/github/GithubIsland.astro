@@ -1,0 +1,48 @@
+---
+import GithubStats from './GithubStats.astro';
+import ContributionCalendar from './ContributionCalendar.astro';
+import { fetchStats } from '@/lib/github';
+import { organizations } from '@/data/organizations';
+
+interface Props {
+  username?: string;
+}
+
+const { username = 'jmtcabili' } = Astro.props;
+const stats = await fetchStats(username);
+---
+
+{
+  stats ? (
+    <div class="hero-github">
+      <GithubStats
+        totalCommits={stats.totalCommits}
+        longestStreak={stats.longestStreak}
+        organizations={organizations}
+      />
+      <div class="hero-heatmap">
+        <ContributionCalendar
+          totalContributions={stats.lastYear.totalContributions}
+          weeks={stats.lastYear.weeks}
+        />
+      </div>
+    </div>
+  ) : (
+    <div class="hero-github-fallback">
+      <p class="muted">Live GitHub statistics currently unavailable.</p>
+      <p>
+        <a href={`https://github.com/${username}`} target="_blank" rel="noopener noreferrer">
+          View GitHub profile on GitHub.com →
+        </a>
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .hero-github-fallback {
+    padding: var(--space-21);
+    border: 1px solid var(--ink);
+    background: var(--paper);
+  }
+</style>

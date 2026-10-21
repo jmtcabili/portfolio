@@ -1,0 +1,147 @@
+---
+// Fallback skeleton rendered instantly while GitHub stats are deferred and streamed in
+---
+
+<div class="hero-github-skeleton" aria-busy="true" aria-label="Loading GitHub statistics">
+  <div class="skeleton-stats">
+    <div class="skeleton-stat">
+      <span class="skeleton-label"></span>
+      <span class="skeleton-value"></span>
+    </div>
+    <div class="skeleton-stat">
+      <span class="skeleton-label"></span>
+      <span class="skeleton-value"></span>
+      <span class="skeleton-detail"></span>
+    </div>
+    <div class="skeleton-stat skeleton-stat-orgs">
+      <span class="skeleton-label"></span>
+      <div class="skeleton-badges">
+        <span class="skeleton-badge"></span>
+        <span class="skeleton-badge"></span>
+        <span class="skeleton-badge"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="skeleton-heatmap">
+    <div class="skeleton-heatmap-box"></div>
+  </div>
+</div>
+
+<style>
+  .skeleton-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-10);
+  }
+
+  .skeleton-stat {
+    display: grid;
+    align-content: start;
+    gap: var(--space-10);
+    padding: var(--space-21);
+    border: 1px solid var(--heat-0);
+    /* Matches the loaded stat cards (GithubStats.astro, .stat) so the swap shifts nothing. */
+    min-height: 141px;
+  }
+
+  .skeleton-stat-orgs {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 48rem) {
+    .skeleton-stats {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .skeleton-stat-orgs {
+      grid-column: auto;
+    }
+  }
+
+  .skeleton-label {
+    display: inline-block;
+    width: 90px;
+    height: 14px;
+    background-color: var(--heat-0);
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  .skeleton-value {
+    display: inline-block;
+    width: 65px;
+    height: 28px;
+    background-color: var(--heat-0);
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  .skeleton-detail {
+    display: inline-block;
+    width: 120px;
+    height: 12px;
+    background-color: var(--heat-0);
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  .skeleton-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+
+  .skeleton-badge {
+    display: inline-block;
+    width: 100px;
+    height: 32px;
+    background-color: var(--heat-0);
+    border: 1px solid var(--heat-0);
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  .skeleton-heatmap {
+    display: none;
+    margin-top: var(--space-42);
+  }
+
+  @media (min-width: 48rem) {
+    .skeleton-heatmap {
+      display: block;
+    }
+  }
+
+  .skeleton-heatmap-box {
+    width: 100%;
+    /* Matches the loaded heatmap plus its caption and legend (ContributionCalendar.astro). */
+    height: 172px;
+    border: 1px solid var(--heat-0);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--heat-0) 0px,
+      var(--heat-0) 10px,
+      transparent 10px,
+      transparent 13px
+    );
+    opacity: 0.6;
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-label,
+    .skeleton-value,
+    .skeleton-detail,
+    .skeleton-badge,
+    .skeleton-heatmap-box {
+      animation: none;
+      opacity: 0.6;
+    }
+  }
+</style>

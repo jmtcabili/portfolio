@@ -1,0 +1,152 @@
+---
+import type { Organization } from '@/data/organizations';
+
+interface Props {
+	totalCommits: number;
+	longestStreak: { days: number; start: string | null; end: string | null };
+	organizations: Organization[];
+}
+
+const { totalCommits, longestStreak, organizations } = Astro.props;
+
+const formatDate = (date: string, withYear: boolean) =>
+	new Date(`${date}T00:00:00Z`).toLocaleString('en', {
+		month: 'short',
+		day: 'numeric',
+		...(withYear ? { year: 'numeric' } : {}),
+		timeZone: 'UTC',
+	});
+
+// "Jul 29 – Aug 4, 2023", or with both years when the streak crosses New Year.
+const streakRange = (() => {
+	const { start, end } = longestStreak;
+	if (!start || !end) return null;
+	const sameYear = start.slice(0, 4) === end.slice(0, 4);
+	return `${formatDate(start, !sameYear)} – ${formatDate(end, true)}`;
+})();
+---
+
+<dl class="stats">
+	<div class="stat">
+		<dt>Total commits</dt>
+		<dd class="value">{totalCommits.toLocaleString('en')}</dd>
+	</div>
+	<div class="stat">
+		<dt>Longest streak</dt>
+		<dd class="value">{longestStreak.days} {longestStreak.days === 1 ? 'day' : 'days'}</dd>
+		{streakRange && <dd class="detail">{streakRange}</dd>}
+	</div>
+	<div class="stat stat-orgs">
+		<dt>Organisations contributed to</dt>
+		<dd>
+			{
+				organizations.length > 0 ? (
+					<ul class="badges">
+						{organizations.map((org) => (
+							<li>
+								<a class="badge" href={org.url}>
+									{org.icon ? (
+										<img class="badge-icon" src={org.icon} width="20" height="20" alt={`${org.name} logo`} />
+									) : (
+										<span class="badge-icon badge-placeholder" aria-hidden="true" />
+									)}
+									{org.name}
+								</a>
+							</li>
+						))}
+					</ul>
+				) : (
+					<p class="detail">None yet</p>
+				)
+			}
+		</dd>
+	</div>
+</dl>
+
+<style>
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-10);
+	}
+
+	.stat {
+		display: grid;
+		align-content: start;
+		gap: var(--space-5);
+		padding: var(--space-21);
+		border: 1px solid var(--ink);
+		/* Keep in step with the skeleton (CalendarSkeleton.astro, .skeleton-stat) so loading shifts nothing. */
+		min-height: 141px;
+	}
+
+	/* Narrow screens: the two numbers share a row, organizations take the full width below. */
+	.stat-orgs {
+		grid-column: 1 / -1;
+	}
+
+	dt {
+		font-size: 15px;
+		line-height: 1.2;
+		color: var(--charcoal);
+	}
+
+	.value {
+		font-size: 30px;
+		font-weight: 400;
+		line-height: 1.1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.detail {
+		font-size: 15px;
+		line-height: 1.2;
+		color: var(--charcoal);
+	}
+
+	.badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-5);
+		margin-top: var(--space-5);
+	}
+
+	.badge {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-10);
+		padding: var(--space-5) var(--space-10);
+		border: 1px solid var(--ink);
+		font-size: 15px;
+		line-height: 1.2;
+		text-decoration: none;
+	}
+
+	.badge:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+
+	.badge-icon {
+		flex: none;
+		width: 20px;
+		height: 20px;
+	}
+
+	/* Same size as the icon, so the badge does not shift once the real file is added. */
+	.badge-placeholder {
+		display: inline-block;
+		border: 1px solid var(--fossil);
+	}
+
+	/* Wide screens: three cards in one row, with more room for the badges. */
+	@media (min-width: 48rem) {
+		.stats {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
+		}
+
+		.stat-orgs {
+			grid-column: auto;
+		}
+	}
+</style>
