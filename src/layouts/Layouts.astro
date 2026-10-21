@@ -1,15 +1,27 @@
 ---
 import '../styles/global.css';
 
-const { title } = Astro.props;
+interface Props {
+	title: string;
+	description?: string;
+}
 
-// The index nav mirrors the section order on the home page. Projects is left out until /projects/ exists.
+const {
+	title,
+	description = 'Johan Marlo Cabili, full-stack AI-native engineer: experience, projects, stack and contact.',
+} = Astro.props;
+
+const path = Astro.url.pathname;
+const onProjects = path === '/projects' || path.startsWith('/projects/');
+
+// The index nav mirrors the section order on the home page. Projects goes to its own page.
+// Only Home and Projects can be marked current; section anchors never are.
 const navItems = [
-	{ href: '/', label: 'Home' },
+	{ href: '/', label: 'Home', current: path === '/' },
 	{ href: '/#about', label: 'About' },
 	{ href: '/#experience', label: 'Experience' },
 	{ href: '/#stack', label: 'Stack' },
-	{ href: '/#github', label: 'GitHub' },
+	{ href: '/projects/', label: 'Projects', current: onProjects },
 	{ href: '/#contact', label: 'Contact' },
 ];
 ---
@@ -19,32 +31,58 @@ const navItems = [
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="color-scheme" content="light dark" />
+		<script is:inline>
+			// Runs before first paint so a saved theme never flashes the other one.
+			// With no saved choice, CSS follows the system setting.
+			try {
+				const theme = localStorage.getItem('theme');
+				if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+			} catch {}
+		</script>
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="preload" href="/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="preload" href="/fonts/major-mono-display-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
 		<div class="container">
 			<header class="site-header">
 				<a class="wordmark" href="/">jmt_</a>
-				<nav class="index-nav" aria-label="Primary">
-					<ul>
-						{navItems.map((item) => (
-							<li>
-								<a
-									href={item.href}
-									aria-current={item.href === '/' && Astro.url.pathname === '/' ? 'page' : undefined}
-								>
-									{item.label}
-								</a>
-							</li>
-						))}
-					</ul>
-				</nav>
+				<div class="header-end">
+					<nav class="index-nav" aria-label="Primary">
+						<ul>
+							{navItems.map((item) => (
+								<li>
+									<a
+										href={item.href}
+										aria-current={item.current ? 'page' : undefined}
+									>
+										{item.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</nav>
+					<button class="theme-toggle" type="button" aria-label="Switch to dark theme" hidden>
+						<svg class="theme-icon theme-icon-moon" role="img" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+							<title>Moon</title>
+							<path d="M11.21 4.04A8 8 0 1 0 19.96 12.79A6.5 6.5 0 0 1 11.21 4.04Z" />
+						</svg>
+						<svg class="theme-icon theme-icon-sun" role="img" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter">
+							<title>Sun</title>
+							<circle cx="12" cy="12" r="4" />
+							<path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41" />
+						</svg>
+					</button>
+				</div>
 			</header>
 			<main id="main">
 				<slot />
@@ -53,10 +91,64 @@ const navItems = [
 				<p>© {new Date().getFullYear()} Johan Marlo Cabili</p>
 				<p>
 					<a href="mailto:jmtcabili@gmail.com">Email jmtcabili@gmail.com</a>
-					·
+					<span aria-hidden="true">·</span>
 					<a href="https://github.com/jmtcabili">GitHub jmtcabili</a>
 				</p>
 			</footer>
 		</div>
+		<script is:inline>
+			// Theme toggle. JavaScript is needed to remember a choice across pages (DESIGN.md allows it with a reason).
+			// The icon (swapped in CSS) and aria-label name the theme a click switches to; the change cross-fades when the browser supports it.
+			(() => {
+				const button = document.querySelector('.theme-toggle');
+				if (!button) return;
+				const root = document.documentElement;
+				const systemDark = matchMedia('(prefers-color-scheme: dark)');
+				const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+				const device = () => (systemDark.matches ? 'dark' : 'light');
+				const current = () => root.dataset.theme || device();
+				const render = () => {
+					const next = current() === 'dark' ? 'light' : 'dark';
+					button.setAttribute('aria-label', `Switch to ${next} theme`);
+				};
+				// The device setting is the default. A saved choice exists only while it differs from the device,
+				// so switching back to the device's theme forgets it and the site follows the device again.
+				const followDevice = () => {
+					delete root.dataset.theme;
+					try {
+						localStorage.removeItem('theme');
+					} catch {}
+				};
+				const toggle = () => {
+					const next = current() === 'dark' ? 'light' : 'dark';
+					if (next === device()) {
+						followDevice();
+					} else {
+						root.dataset.theme = next;
+						try {
+							localStorage.setItem('theme', next);
+						} catch {}
+					}
+					render();
+				};
+				// A saved choice that now matches the device is redundant; drop it so later device changes apply.
+				if (root.dataset.theme === device()) followDevice();
+				render();
+				button.hidden = false;
+				// When the device switches theme (e.g. automatic dark mode at sunset), follow it and drop any override.
+				systemDark.addEventListener('change', () => {
+					followDevice();
+					render();
+				});
+				button.addEventListener('click', () => {
+					if (!document.startViewTransition || reduceMotion.matches) return toggle();
+					// Drop project-title names before the old state is captured, so titles fade with the page.
+					root.classList.add('theme-switching');
+					document
+						.startViewTransition(toggle)
+						.finished.finally(() => root.classList.remove('theme-switching'));
+				});
+			})();
+		</script>
 	</body>
 </html>

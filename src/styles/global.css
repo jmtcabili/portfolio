@@ -31,6 +31,10 @@
 	--heat-2: #6f716e;
 	--heat-3: #383a37;
 	--heat-4: #000000;
+	/* Text-safe accent for link hover. Matches slate-iris in light; lighter in dark, where slate-iris is too dim for text. */
+	--link-hover: #495472;
+
+	color-scheme: light;
 
 	--font-sans: "Hanken Grotesk", system-ui, sans-serif;
 	--font-mono: "Major Mono Display", "Hanken Grotesk", monospace;
@@ -41,6 +45,57 @@
 	--space-42: 42px;
 	--space-84: 84px;
 	--space-147: 147px;
+
+	/* Motion tokens. See DESIGN.md, Motion. */
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+	--duration-press: 160ms;
+	--duration-fade: 200ms;
+	--duration-reveal: 250ms;
+	--duration-page: 280ms;
+}
+
+/* Dark theme. It follows the system setting unless the visitor picked a theme with the header toggle,
+   which sets data-theme on <html>. The same values appear twice because CSS cannot share a block
+   between a media query and an attribute selector; keep them in sync. */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--paper: #0d0e0d;
+		--ink: #eceeeb;
+		--charcoal: #cfd1cd;
+		--ink-muted: #9a9c98;
+		--fossil: #454744;
+		--slate-iris: #56628a;
+		--on-slate-iris: #ffffff;
+		--rule: #eceeeb;
+		--focus: #a7b2d8;
+		--link-hover: #a7b2d8;
+		--heat-0: #1b1c1b;
+		--heat-1: #3a3c39;
+		--heat-2: #6f716e;
+		--heat-3: #b2b4b1;
+		--heat-4: #eceeeb;
+		color-scheme: dark;
+	}
+}
+
+:root[data-theme="dark"] {
+	--paper: #0d0e0d;
+	--ink: #eceeeb;
+	--charcoal: #cfd1cd;
+	--ink-muted: #9a9c98;
+	--fossil: #454744;
+	--slate-iris: #56628a;
+	--on-slate-iris: #ffffff;
+	--rule: #eceeeb;
+	--focus: #a7b2d8;
+	--link-hover: #a7b2d8;
+	--heat-0: #1b1c1b;
+	--heat-1: #3a3c39;
+	--heat-2: #6f716e;
+	--heat-3: #b2b4b1;
+	--heat-4: #eceeeb;
+	color-scheme: dark;
 }
 
 *,
@@ -100,7 +155,7 @@ a {
 }
 
 a:hover {
-	color: var(--slate-iris);
+	color: var(--link-hover);
 }
 
 :focus-visible {
@@ -211,6 +266,67 @@ a:hover {
 	gap: var(--space-10) var(--space-21);
 }
 
+.header-end {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-10) var(--space-42);
+}
+
+/* Theme toggle: an icon button beside the nav. The moon shows in light (a click switches to dark),
+   the sun in dark. CSS swaps them with the same selectors as the theme tokens, so the right icon
+   shows on first paint. It stays hidden until its script runs, because it cannot work without
+   JavaScript; the system setting still applies then. */
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--space-5);
+	margin: calc(-1 * var(--space-5));
+	border: 0;
+	background: none;
+	color: var(--ink-muted);
+	cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+	display: none;
+}
+
+.theme-icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+}
+
+.theme-icon-sun {
+	display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) .theme-icon-moon {
+		display: none;
+	}
+
+	:root:not([data-theme="light"]) .theme-icon-sun {
+		display: block;
+	}
+}
+
+:root[data-theme="dark"] .theme-icon-moon {
+	display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-sun {
+	display: block;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.theme-toggle:hover {
+		color: var(--ink);
+	}
+}
+
 .index-nav a {
 	font-size: 15px;
 	color: var(--ink-muted);
@@ -255,6 +371,40 @@ a:hover {
 	margin-top: var(--space-42);
 }
 
+/* Portrait cropped to a circle from the top of the photo, so the face stays in frame. */
+.hero-portrait {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	object-fit: cover;
+	object-position: top;
+	border-radius: 50%;
+}
+
+.hero-wordmark {
+	margin-top: var(--space-21);
+}
+
+/* GitHub stats sit under the hero copy. The heatmap needs width, so it only shows from 48rem. */
+.hero-github-section {
+	margin-top: var(--space-84);
+}
+
+.hero-github-heading {
+	margin-bottom: var(--space-21);
+}
+
+.hero-heatmap {
+	display: none;
+	margin-top: var(--space-42);
+}
+
+@media (min-width: 48rem) {
+	.hero-heatmap {
+		display: block;
+	}
+}
+
 .button {
 	display: inline-block;
 	padding: var(--space-21);
@@ -265,9 +415,10 @@ a:hover {
 	text-decoration: none;
 }
 
+/* Paper text on ink, so the hover stays readable in both themes. */
 .button:hover {
 	background: var(--ink);
-	color: var(--on-slate-iris);
+	color: var(--paper);
 }
 
 /* Rows: hairline-separated list items used for experience, stack and projects. */
@@ -347,6 +498,24 @@ a:hover {
 	color: var(--charcoal);
 }
 
+/* Each footer line lays out its links and the "·" separator as items, so the spacing never collapses. */
+.site-footer p {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-5) var(--space-10);
+}
+
+/* Spacing that used to be inline style attributes on the home page. */
+.hero-role,
+.contact-note {
+	margin-top: var(--space-21);
+}
+
+.hero-lede,
+.row-summary {
+	margin-top: var(--space-10);
+}
+
 /* Wider screens: sections become two columns, as on spacelab.co.uk. */
 @media (min-width: 48rem) {
 	html {
@@ -378,7 +547,515 @@ a:hover {
 		font-size: 40px;
 	}
 
+	.hero-identity {
+		max-width: 200px;
+	}
+
 	.section > h2 {
 		font-size: 30px;
+	}
+}
+
+/* ---------- Projects ---------- */
+
+.section-more {
+	margin-top: var(--space-42);
+}
+
+/* Page head for /projects/ and write-ups: a caption in the 200px column, the h1 on the right. */
+.page-head {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-21);
+	padding: var(--space-84) 0 0;
+}
+
+.page-head-count,
+.breadcrumb {
+	font-size: 15px;
+	line-height: 1.2;
+	color: var(--charcoal);
+}
+
+.page-head h1 {
+	text-wrap: balance;
+}
+
+.page-head-lede {
+	max-width: 52ch;
+	margin-top: var(--space-21);
+	text-wrap: pretty;
+}
+
+.breadcrumb ol {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.breadcrumb li + li::before {
+	content: "/";
+	margin-right: var(--space-5);
+	color: var(--ink-muted);
+}
+
+/* Filter chips: links to section anchors. The active chip turns ink-filled; see projects/index.astro. */
+.filter {
+	margin-top: var(--space-42);
+}
+
+.filter ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-10);
+}
+
+.filter a {
+	display: inline-flex;
+	align-items: baseline;
+	gap: var(--space-10);
+	padding: var(--space-10) var(--space-21);
+	border: 1px solid var(--ink);
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.2;
+	text-decoration: none;
+	color: var(--ink);
+}
+
+.filter a:hover {
+	color: var(--ink);
+	text-decoration: underline;
+}
+
+.filter-count {
+	font-variant-numeric: tabular-nums;
+}
+
+.gallery:not(:has(.kind:target)) .filter-all {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+/* While one kind is the :target, hide the others. The large scroll margin keeps the page
+   at the top instead of jumping past the filter. */
+.gallery:has(.kind:target) .kind:not(:target) {
+	display: none;
+}
+
+.gallery,
+.kind {
+	scroll-margin-top: 100vh;
+}
+
+.kind-head {
+	display: grid;
+	align-content: start;
+	gap: var(--space-5);
+}
+
+.kind-head h2 {
+	font-size: 30px;
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+.kind-count {
+	font-size: 15px;
+	line-height: 1.2;
+	color: var(--charcoal);
+}
+
+.kind-reset {
+	display: none;
+	margin-top: var(--space-10);
+	font-size: 15px;
+	line-height: 1.2;
+}
+
+.kind:target .kind-reset {
+	display: inline;
+}
+
+/* Card grid: one, two or three columns, measured on the content column (.kind-body) rather than the viewport.
+   Each card spans two grid rows through subgrid, so frames and bodies line up across a row. */
+.kind-body {
+	container-type: inline-size;
+	min-width: 0;
+}
+
+.card-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-21);
+}
+
+.card {
+	position: relative;
+	display: grid;
+	grid-row: span 2;
+	grid-template-rows: subgrid;
+	row-gap: 0;
+	border: 1px solid var(--ink);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+/* Frame first on screen, title first in the reading order. */
+/* The ::before spacer sets a 16:10 minimum height (padding % follows the frame's width). Unlike
+   aspect-ratio, it lets the frame stretch to the tallest frame in its row, so frames line up. */
+.card-frame {
+	--frame-ratio: 62.5%;
+	grid-row: 1;
+	position: relative;
+	display: flex;
+	align-items: flex-end;
+	border-bottom: 1px solid var(--ink);
+	overflow: hidden;
+}
+
+.card-frame::before {
+	content: "";
+	flex: none;
+	width: 0;
+	padding-top: var(--frame-ratio);
+}
+
+.card-frame picture {
+	position: absolute;
+	inset: 0;
+}
+
+.card-body {
+	grid-row: 2;
+	display: grid;
+	align-content: start;
+	gap: var(--space-10);
+	padding: var(--space-21);
+}
+
+.card-frame picture,
+.card-image {
+	width: 100%;
+	height: 100%;
+}
+
+.card-image {
+	object-fit: cover;
+	object-position: top;
+}
+
+.card-frame-text {
+	padding: var(--space-21);
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.15;
+	text-wrap: pretty;
+}
+
+.card-title {
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.15;
+	text-wrap: balance;
+}
+
+.card-title a {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* The title link covers the whole card. */
+.card-title a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.card:hover .card-title a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.card-title a:focus-visible {
+	outline: none;
+}
+
+.card:has(.card-title a:focus-visible) {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+
+.card-meta {
+	font-size: 15px;
+	line-height: 1.2;
+	color: var(--charcoal);
+}
+
+.card .tags {
+	margin-top: var(--space-5);
+}
+
+.card-accent {
+	background: var(--slate-iris);
+	border-color: var(--slate-iris);
+	color: var(--on-slate-iris);
+}
+
+.card-accent .card-frame {
+	border-bottom-color: var(--on-slate-iris);
+}
+
+.card-accent .card-meta {
+	color: var(--on-slate-iris);
+}
+
+.card-accent .tag {
+	border-color: var(--on-slate-iris);
+}
+
+.tags-flush {
+	margin-top: 0;
+}
+
+.link-list {
+	display: grid;
+	gap: var(--space-5);
+}
+
+.project-title {
+	max-width: 18ch;
+}
+
+.project-cover {
+	margin-top: var(--space-84);
+	border: 1px solid var(--ink);
+}
+
+.project-cover img {
+	width: 100%;
+	height: auto;
+}
+
+.prose h2,
+.prose h3 {
+	margin-top: var(--space-42);
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.15;
+}
+
+.prose ul,
+.prose ol {
+	margin: var(--space-21) 0 0;
+	padding-left: var(--space-21);
+	list-style: disc;
+}
+
+.prose li + li {
+	margin-top: var(--space-5);
+}
+
+@container (min-width: 34rem) {
+	.card-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.card-lead {
+		grid-column: span 2;
+	}
+
+	.card-lead .card-frame {
+		--frame-ratio: 42.857%;
+	}
+
+	.card-lead .card-frame-text {
+		font-size: 30px;
+		line-height: 1.1;
+		max-width: 24ch;
+	}
+}
+
+/* Three columns: the lead shares its row with one card, so its frame takes that card's height. */
+@container (min-width: 52rem) {
+	.card-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.card-lead .card-frame {
+		--frame-ratio: 0%;
+	}
+}
+
+@media (min-width: 48rem) {
+	.page-head {
+		grid-template-columns: 200px 1fr;
+	}
+}
+
+/* ---------- Motion ----------
+   Every effect here is CSS only and follows DESIGN.md, Motion. Browsers without support
+   for a feature show the final state. */
+
+/* 1. Smooth scrolling for in-page nav anchors. Project kinds keep their own
+   100vh scroll margin so the filter never jumps. */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+.section:not(.kind) {
+	scroll-margin-top: var(--space-21);
+}
+
+/* 2. GitHub stats fade in when the server island replaces the skeleton.
+   Opacity only, so it is already gentle enough for reduced motion. */
+.hero-github,
+.hero-github-fallback {
+	transition: opacity var(--duration-reveal) var(--ease-out);
+}
+
+@starting-style {
+	.hero-github,
+	.hero-github-fallback {
+		opacity: 0;
+	}
+}
+
+/* 3. The jmt_ wordmark types itself once, then the _ caret blinks twice and stays.
+   clip-path reveals one monospace character per step without touching layout.
+   Reduced motion: shown already typed. The h1 name never animates. */
+.hero-wordmark {
+	width: max-content;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.hero-wordmark {
+		animation: wordmark-type 320ms steps(4, end) 150ms both;
+	}
+
+	.wordmark-caret {
+		animation: wordmark-blink 500ms steps(1, end) 470ms 2;
+	}
+}
+
+/* Negative top and bottom insets keep the _ visible: it sits below the line box. */
+@keyframes wordmark-type {
+	from {
+		clip-path: inset(-50% 100% -50% 0);
+	}
+	to {
+		clip-path: inset(-50% 0 -50% 0);
+	}
+}
+
+@keyframes wordmark-blink {
+	50% {
+		opacity: 0;
+	}
+}
+
+/* 4. Project card title to write-up h1: a native cross-document View Transition.
+   Each title carries view-transition-name p-<slug> (set in the markup), so the title
+   moves into the heading while the rest of the page cross-fades. */
+@view-transition {
+	navigation: auto;
+}
+
+.card-title,
+.project-title {
+	view-transition-class: project-title;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: var(--duration-fade);
+	animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(.project-title) {
+	animation-duration: var(--duration-page);
+	animation-timing-function: var(--ease-out);
+}
+
+/* The card title and the h1 wrap differently, so scaling one into the other stretches the text.
+   Drop the old snapshot and let the new title grow from the card's position, keeping its
+   proportions while it fades in. */
+::view-transition-old(.project-title) {
+	display: none;
+}
+
+::view-transition-new(.project-title) {
+	width: auto;
+	height: 100%;
+	animation-duration: var(--duration-page);
+}
+
+/* Reduced motion: no moving title, only the page cross-fade. */
+@media (prefers-reduced-motion: reduce) {
+	.card-title,
+	.project-title {
+		view-transition-name: none !important;
+	}
+}
+
+/* Theme switch: titles fade with the page instead of moving as their own groups.
+   The toggle script sets .theme-switching on <html> for the length of the transition. */
+.theme-switching :is(.card-title, .project-title) {
+	view-transition-name: none !important;
+}
+
+/* 5. /projects/ filter: the section a chip targets fades in. Hiding stays instant. */
+.kind {
+	transition: opacity var(--duration-fade) var(--ease-out);
+}
+
+@starting-style {
+	.gallery:has(.kind:target) .kind:target {
+		opacity: 0;
+	}
+}
+
+/* 6. /projects/ cards rise in as they scroll into view, tied to scroll position.
+   Cards already in view on load are shown complete. */
+@supports (animation-timeline: view()) {
+	.card {
+		animation: card-in var(--ease-out) both;
+		animation-timeline: view();
+		animation-range: entry 0% entry 35%;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card {
+			animation-name: card-fade;
+		}
+	}
+}
+
+@keyframes card-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+}
+
+@keyframes card-fade {
+	from {
+		opacity: 0;
+	}
+}
+
+/* 7. Button press feedback. Reduced motion: no scale. */
+@media (prefers-reduced-motion: no-preference) {
+	.button {
+		transition: transform var(--duration-press) var(--ease-out);
+	}
+
+	.button:active {
+		transform: scale(0.97);
 	}
 }

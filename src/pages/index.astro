@@ -1,16 +1,202 @@
 ---
+import Layout from '../layouts/Layouts.astro';
+import GithubIsland from '@/components/github/GithubIsland.astro';
+import CalendarSkeleton from '@/components/github/CalendarSkeleton.astro';
+import { getProjects, groupByKind, projectUrl } from '@/lib/projects';
+
+const experience = [
+	{
+		role: 'Data Analyst Intern',
+		org: 'American International Assurance, Makati',
+		dates: 'Apr 2026 – Aug 2026',
+		points: [
+			'Built an automated extraction and preprocessing pipeline in Python, Pandas, SQL and Azure Databricks, curating a dataset of 6.9k+ emails with PII filters and LLM-generated intent labels.',
+			'Automated daily and monthly SQL reports as Azure Databricks jobs to cut ticket-resolution effort.',
+			'Maintained data governance through SQL exploration and reporting of data-quality issues.',
+		],
+	},
+	{
+		role: 'Web Manager',
+		org: 'Green & White, Malate',
+		dates: 'Jul 2025 – Present',
+		points: [
+			'Built the organisation’s main website with other developers and creatives, drawing 1.6k+ visits.',
+			'Built an RFID attendance web app with React, TypeScript and Supabase.',
+			'Automated registration forms, pictorial schedules and a yearbook pickup form with Google Apps Script.',
+		],
+	},
+	{
+		role: 'Full-Stack Developer',
+		org: 'Fun For Kids Corporation, Remote',
+		dates: 'Jul 2025 – Dec 2025',
+		points: [
+			'Built a web POS for stroller and wheelchair rentals across 13 kiosks with Next.js, Tailwind CSS and Supabase.',
+			'Built an interactive Chart.js dashboard for sales trends, branch performance and employee attendance.',
+		],
+	},
+	{
+		role: 'Research Apprentice',
+		org: 'VISON Technologies Corporation, Malate',
+		dates: 'Mar 2025 – Aug 2025',
+		points: [
+			'Co-authored and presented a paper on PyTesseract’s performance on handwritten documents at the 2025 Philippine Computer Science Congress.',
+			'Built a client video upload interface with PHP, MySQL and DigitalOcean.',
+		],
+	},
+	{
+		role: 'Web Development Staffer',
+		org: 'The LaSallian, Malate',
+		dates: 'Oct 2024 – Aug 2026',
+		points: [
+			'Helped build the responsive website for the 2025 General Elections of the DLSU student government with React and Tailwind CSS.',
+		],
+	},
+];
+
+const stack = [
+	{ label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'SQL', 'Java', 'C', 'C++'] },
+	{ label: 'Web', items: ['Next.js', 'React', 'Tailwind CSS', 'Node.js', 'Express.js', 'PHP'] },
+	{ label: 'Data', items: ['PostgreSQL', 'MySQL', 'Supabase', 'MongoDB', 'Azure Databricks', 'Pandas', 'Google Sheets'] },
+	{ label: 'AI workflows', items: ['MCP servers', 'Tool-calling agents', 'LLM labelling', 'Claude Code', 'Antigravity'] },
+	{ label: 'Tools', items: ['Git', 'GitHub', 'Docker', 'Bash', 'Postman', 'Figma'] },
+];
+
+// Home shows the lead project of each kind; the full set lives on /projects/.
+const allProjects = await getProjects();
+const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.label, project: group.projects[0] }));
+
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Home · Johan">
+	<section class="hero" aria-labelledby="intro">
+		<div class="hero-identity">
+			<img
+				class="hero-portrait"
+				src="/portrait.avif"
+				width="1878"
+				height="2850"
+				alt="Portrait of Johan Marlo Cabili"
+				fetchpriority="high"
+			/>
+			<p class="display-mono hero-wordmark" aria-hidden="true">jmt<span class="wordmark-caret">_</span></p>
+		</div>
+		<div>
+			<h1 id="intro" class="display">Johan Marlo Cabili</h1>
+			<p class="heading hero-role">Full-stack AI-native Engineer</p>
+			<p class="subheading muted hero-lede">
+				I ship production-ready systems with AI-native workflows, from data pipelines to live web products.
+			</p>
+			<p class="hero-actions">
+				<a class="button" href="#contact">Get in touch</a>
+			</p>
+			<div id="github" class="hero-github-section">
+				<h2 class="caption muted hero-github-heading">GitHub activity</h2>
+				<GithubIsland server:defer>
+					<CalendarSkeleton slot="fallback" />
+				</GithubIsland>
+			</div>
+		</div>
+	</section>
+
+	<section class="section" id="about" aria-labelledby="about-heading">
+		<h2 id="about-heading">About</h2>
+		<div class="section-body prose">
+			<p>
+				I am a full-stack engineer with more than two years of experience building web products and data tooling.
+				I work in Next.js and TypeScript and integrate agentic workflows into development, using MCP servers,
+				tool-calling agents and coding agents such as Claude Code and Antigravity.
+			</p>
+			<p>
+				I am finishing a BS in Computer Science, majoring in Computer Systems Engineering, at De La Salle University,
+				expected December 2026.
+			</p>
+		</div>
+	</section>
+
+	<section class="section" id="experience" aria-labelledby="experience-heading">
+		<h2 id="experience-heading">Experience</h2>
+		<div class="section-body rows">
+			{
+				experience.map((job) => (
+					<article class="row">
+						<p class="row-date">{job.dates}</p>
+						<div class="row-meta-col">
+							<h3 class="row-title">{job.role}</h3>
+							<p class="row-meta">{job.org}</p>
+							<ul>
+								{job.points.map((point) => (
+									<li>{point}</li>
+								))}
+							</ul>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="section" id="stack" aria-labelledby="stack-heading">
+		<h2 id="stack-heading">Stack</h2>
+		<div class="section-body rows">
+			{
+				stack.map((group) => (
+					<div class="row">
+						<p class="row-date">{group.label}</p>
+						<div class="row-meta-col">
+							<ul class="tags">
+								{group.items.map((item) => (
+									<li class="tag">{item}</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+
+
+	<section class="section" id="projects" aria-labelledby="projects-heading">
+		<h2 id="projects-heading">Projects</h2>
+		<div class="section-body">
+			<div class="rows">
+				{
+					featuredProjects.map(({ kind, project }) => (
+						<article class="row">
+							<p class="row-date">{kind}</p>
+							<div class="row-meta-col">
+								<h3 class="row-title">
+									<a href={projectUrl(project)}>{project.data.title}</a>
+								</h3>
+								<p class="row-summary">{project.data.summary}</p>
+								{project.data.stack.length > 0 && (
+									<ul class="tags" aria-label="Stack">
+										{project.data.stack.map((tag) => (
+											<li class="tag">{tag}</li>
+										))}
+									</ul>
+								)}
+							</div>
+						</article>
+					))
+				}
+			</div>
+			<p class="section-more">
+				<a class="button" href="/projects/">See all {allProjects.length} projects</a>
+			</p>
+		</div>
+	</section>
+
+	<section class="section" id="contact" aria-labelledby="contact-heading">
+		<h2 id="contact-heading">Contact</h2>
+		<div class="section-body">
+			<p class="contact-line">
+				<a href="mailto:jmtcabili@gmail.com">jmtcabili@gmail.com</a>
+			</p>
+			<p class="muted contact-note">
+				Open to AI engineering roles and startup work. Email is the fastest way to reach me.
+			</p>
+		</div>
+	</section>
+</Layout>
