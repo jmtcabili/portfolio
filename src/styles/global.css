@@ -1,0 +1,384 @@
+@import "tailwindcss";
+
+@font-face {
+	font-family: "Hanken Grotesk";
+	src: url("/fonts/hanken-grotesk-latin.woff2") format("woff2");
+	font-weight: 300 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Major Mono Display";
+	src: url("/fonts/major-mono-display-latin.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: optional;
+}
+
+:root {
+	--paper: #ffffff;
+	--ink: #000000;
+	--charcoal: #2c2222;
+	--ink-muted: #6f716e;
+	--fossil: #b2b4b1;
+	--slate-iris: #495472;
+	--on-slate-iris: #ffffff;
+	--rule: #000000;
+	--focus: #495472;
+	--heat-0: #eceeeb;
+	--heat-1: #b2b4b1;
+	--heat-2: #6f716e;
+	--heat-3: #383a37;
+	--heat-4: #000000;
+
+	--font-sans: "Hanken Grotesk", system-ui, sans-serif;
+	--font-mono: "Major Mono Display", "Hanken Grotesk", monospace;
+
+	--space-5: 5px;
+	--space-10: 10px;
+	--space-21: 21px;
+	--space-42: 42px;
+	--space-84: 84px;
+	--space-147: 147px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: 17px;
+	font-weight: 300;
+	line-height: 1.3;
+	letter-spacing: 0.011em;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	min-height: 100vh;
+}
+
+::selection {
+	background: var(--slate-iris);
+	color: var(--on-slate-iris);
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+dl,
+dd,
+ul {
+	margin: 0;
+}
+
+ul {
+	padding: 0;
+	list-style: none;
+}
+
+a {
+	color: inherit;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+}
+
+a:hover {
+	color: var(--slate-iris);
+}
+
+:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+
+.container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 var(--space-21);
+}
+
+/* Type scale: 15, 17, 19, 21, 30, 62px only. */
+.display-mono {
+	font-family: var(--font-mono);
+	font-size: 62px;
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0;
+}
+
+.display {
+	font-size: 62px;
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0.011em;
+}
+
+.heading {
+	font-size: 30px;
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+.heading-sm {
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.15;
+}
+
+.subheading {
+	font-size: 19px;
+	font-weight: 400;
+	line-height: 1.15;
+}
+
+.caption {
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.2;
+}
+
+.muted {
+	color: var(--ink-muted);
+}
+
+.prose {
+	max-width: 68ch;
+}
+
+.prose p + p {
+	margin-top: var(--space-21);
+}
+
+/* Site header: wordmark and index nav sit on one hairline, as on spacelab.co.uk. */
+.skip-link {
+	position: absolute;
+	top: var(--space-10);
+	left: var(--space-10);
+	padding: var(--space-10) var(--space-21);
+	background: var(--slate-iris);
+	color: var(--on-slate-iris);
+	font-size: 15px;
+	transform: translateY(-200%);
+}
+
+.skip-link:focus {
+	transform: none;
+}
+
+.site-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-21);
+	padding: var(--space-21) 0;
+	border-bottom: 1px solid var(--rule);
+}
+
+.wordmark {
+	font-family: var(--font-mono);
+	font-size: 21px;
+	line-height: 1.15;
+	text-decoration: none;
+	color: var(--ink);
+}
+
+.wordmark:hover {
+	color: var(--ink);
+}
+
+.index-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-10) var(--space-21);
+}
+
+.index-nav a {
+	font-size: 15px;
+	color: var(--ink-muted);
+	text-decoration: none;
+	border-bottom: 2px solid transparent;
+}
+
+.index-nav a:hover,
+.index-nav a[aria-current="page"] {
+	color: var(--ink);
+	border-bottom-color: var(--ink);
+}
+
+.index-nav a[aria-current="page"] {
+	border-bottom-color: var(--ink);
+}
+
+/* Sections: heading in a left column, content on the right, separated by hairlines. */
+.section {
+	display: grid;
+	gap: var(--space-21);
+	padding: var(--space-84) 0 0;
+}
+
+.section > h2 {
+	font-size: 30px;
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+.section-body {
+	min-width: 0;
+}
+
+.hero {
+	display: grid;
+	gap: var(--space-21);
+	padding: var(--space-147) 0 var(--space-84);
+}
+
+.hero-actions {
+	margin-top: var(--space-42);
+}
+
+.button {
+	display: inline-block;
+	padding: var(--space-21);
+	background: var(--slate-iris);
+	color: var(--on-slate-iris);
+	font-size: 15px;
+	line-height: 1.2;
+	text-decoration: none;
+}
+
+.button:hover {
+	background: var(--ink);
+	color: var(--on-slate-iris);
+}
+
+/* Rows: hairline-separated list items used for experience, stack and projects. */
+.rows > * + * {
+	border-top: 1px solid var(--rule);
+}
+
+.hero,
+.section,
+.row {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.row {
+	display: grid;
+	gap: var(--space-10);
+	padding: var(--space-21) 0;
+}
+
+.row > * {
+	min-width: 0;
+}
+
+.row-date {
+	font-size: 15px;
+	color: var(--charcoal);
+}
+
+.row-title {
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.15;
+}
+
+.row-meta {
+	font-size: 15px;
+	color: var(--charcoal);
+}
+
+.row ul:not(.tags) {
+	display: grid;
+	gap: var(--space-5);
+	margin-top: var(--space-10);
+	list-style: disc;
+	padding-left: var(--space-21);
+}
+
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-5);
+	margin-top: var(--space-10);
+}
+
+.tag {
+	padding: var(--space-5) var(--space-10);
+	border: 1px solid var(--ink);
+	font-size: 15px;
+	line-height: 1.2;
+}
+
+.contact-line {
+	font-size: 30px;
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+.site-footer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: var(--space-10) var(--space-21);
+	margin-top: var(--space-84);
+	padding: var(--space-21) 0;
+	border-top: 1px solid var(--rule);
+	font-size: 15px;
+	color: var(--charcoal);
+}
+
+/* Wider screens: sections become two columns, as on spacelab.co.uk. */
+@media (min-width: 48rem) {
+	html {
+		font-size: 17px;
+	}
+
+	.hero {
+		grid-template-columns: 200px 1fr;
+	}
+
+	.section {
+		grid-template-columns: 200px 1fr;
+	}
+
+	.row {
+		grid-template-columns: 10rem 1fr;
+		gap: var(--space-21);
+	}
+
+	.row-meta-col {
+		grid-column: 2;
+	}
+}
+
+/* Narrow screens: the display sizes step down to 40px. */
+@media (max-width: 47.99rem) {
+	.display-mono,
+	.display {
+		font-size: 40px;
+	}
+
+	.section > h2 {
+		font-size: 30px;
+	}
+}

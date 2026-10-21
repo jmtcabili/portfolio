@@ -22,3 +22,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# agent tooling (local skills and assistant config)
+.agent/
+.agents/
+.claude/
+.codex/
+.cursor/
+.gemini/
+
+# résumé with personal contact details
+Cabili.pdf
