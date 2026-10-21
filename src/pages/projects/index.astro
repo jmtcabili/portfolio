@@ -1,0 +1,81 @@
+---
+import Layout from '@/layouts/Layouts.astro';
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+import { getProjects, groupByKind } from '@/lib/projects';
+
+const projects = await getProjects();
+const groups = groupByKind(projects);
+
+// The filter needs no JavaScript: each chip links to a section anchor, and CSS hides the other
+// sections while one is the :target. Only the active-chip rule depends on the kind ids, so it is generated here.
+const filterCss = groups
+	.map(
+		({ id }) =>
+			`.gallery:has(#${id}:target) .filter a[href="#${id}"]{background:var(--ink);color:var(--paper)}`,
+	)
+	.join('');
+---
+
+<Layout
+	title="Projects · Johan"
+	description="Projects by Johan Marlo Cabili: data pipelines, production web apps, websites and research, each with a write-up."
+>
+	<style is:inline set:html={filterCss}></style>
+
+	<div class="gallery" id="all">
+		<header class="page-head">
+			<p class="page-head-count">{projects.length} projects</p>
+			<div>
+				<h1 class="display">Projects</h1>
+				<p class="subheading muted page-head-lede">
+					Work from my internship, freelance and student organisation roles. Each project opens a write-up of what I
+					built and how.
+				</p>
+				<nav class="filter" aria-label="Filter projects by kind">
+					<ul>
+						<li>
+							<a href="#all" class="filter-all">All <span class="filter-count">{projects.length}</span></a>
+						</li>
+						{
+							groups.map((group) => (
+								<li>
+									<a href={`#${group.id}`}>
+										{group.label} <span class="filter-count">{group.projects.length}</span>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		{
+			groups.map((group, groupIndex) => (
+				<section class="section kind" id={group.id} aria-labelledby={`${group.id}-heading`}>
+					<div class="kind-head">
+						<h2 id={`${group.id}-heading`}>{group.label}</h2>
+						<p class="kind-count">
+							{group.projects.length} {group.projects.length === 1 ? 'project' : 'projects'}
+						</p>
+						<a class="kind-reset" href="#all">
+							Show all {projects.length} projects
+						</a>
+					</div>
+					<div class="kind-body">
+						<div class="card-grid">
+							{group.projects.map((project, index) => (
+								<ProjectCard
+									project={project}
+									lead={index === 0 && group.projects.length > 1}
+									accent={groupIndex === 0 && index === 0}
+									eager={groupIndex === 0}
+								/>
+							))}
+						</div>
+					</div>
+				</section>
+			))
+		}
+	</div>
+</Layout>

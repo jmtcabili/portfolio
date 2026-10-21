@@ -1,0 +1,137 @@
+---
+import { Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Layout from '@/layouts/Layouts.astro';
+import { projectKinds } from '@/data/projectKinds';
+import { getProjects, projectUrl, type Project } from '@/lib/projects';
+
+export async function getStaticPaths() {
+	const projects = await getProjects();
+	return projects.map((project, index) => ({
+		params: { slug: project.id },
+		props: {
+			project,
+			// Previous and next follow gallery order and wrap around, so every write-up leads to another.
+			previous: projects[(index - 1 + projects.length) % projects.length],
+			next: projects[(index + 1) % projects.length],
+		},
+	}));
+}
+
+interface Props {
+	project: Project;
+	previous: Project;
+	next: Project;
+}
+
+const { project, previous, next } = Astro.props;
+const { title, summary, kind, role, org, dates, stack, cover, coverAlt, links } = project.data;
+const kindLabel = projectKinds.find((k) => k.id === kind)?.label ?? kind;
+const { Content } = await render(project);
+---
+
+<Layout title={`${title} · Johan`} description={summary}>
+	<article>
+		<header class="page-head">
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<ol>
+					<li><a href="/projects/">Projects</a></li>
+					<li><a href={`/projects/#${kind}`}>{kindLabel}</a></li>
+				</ol>
+			</nav>
+			<div>
+				<h1 class="display project-title" style={`view-transition-name: p-${project.id};`}>{title}</h1>
+				<p class="subheading muted page-head-lede">{summary}</p>
+			</div>
+		</header>
+
+		{
+			cover && (
+				<div class="project-cover">
+					<Picture
+						src={cover}
+						alt={coverAlt ?? ''}
+						formats={['avif', 'webp']}
+						widths={[640, 1200, 1800]}
+						sizes="(min-width: 75rem) 1158px, 100vw"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				</div>
+			)
+		}
+
+		<section class="section" aria-labelledby="details-heading">
+			<h2 id="details-heading">Details</h2>
+			<dl class="section-body rows">
+				<div class="row">
+					<dt class="row-date">Role</dt>
+					<dd class="row-meta-col">{role}</dd>
+				</div>
+				<div class="row">
+					<dt class="row-date">Organisation</dt>
+					<dd class="row-meta-col">{org}</dd>
+				</div>
+				<div class="row">
+					<dt class="row-date">Dates</dt>
+					<dd class="row-meta-col">{dates}</dd>
+				</div>
+				{
+					stack.length > 0 && (
+						<div class="row">
+							<dt class="row-date">Stack</dt>
+							<dd class="row-meta-col">
+								<ul class="tags tags-flush">
+									{stack.map((item) => (
+										<li class="tag">{item}</li>
+									))}
+								</ul>
+							</dd>
+						</div>
+					)
+				}
+				{
+					links.length > 0 && (
+						<div class="row">
+							<dt class="row-date">Links</dt>
+							<dd class="row-meta-col">
+								<ul class="link-list">
+									{links.map((link) => (
+										<li>
+											<a href={link.href}>{link.label}</a>
+										</li>
+									))}
+								</ul>
+							</dd>
+						</div>
+					)
+				}
+			</dl>
+		</section>
+
+		<section class="section" aria-labelledby="overview-heading">
+			<h2 id="overview-heading">Overview</h2>
+			<div class="section-body prose">
+				<Content />
+			</div>
+		</section>
+	</article>
+
+	<nav class="section" aria-labelledby="more-heading">
+		<h2 id="more-heading">More projects</h2>
+		<ul class="section-body rows">
+			<li class="row">
+				<p class="row-date">Previous</p>
+				<a class="row-meta-col row-title" href={projectUrl(previous)}>{previous.data.title}</a>
+			</li>
+			<li class="row">
+				<p class="row-date">Next</p>
+				<a class="row-meta-col row-title" href={projectUrl(next)}>{next.data.title}</a>
+			</li>
+			<li class="row">
+				<p class="row-date">Index</p>
+				<a class="row-meta-col row-title" href="/projects/">All projects</a>
+			</li>
+		</ul>
+	</nav>
+</Layout>

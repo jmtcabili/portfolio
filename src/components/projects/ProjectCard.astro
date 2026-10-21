@@ -1,0 +1,53 @@
+---
+import { Picture } from 'astro:assets';
+import { projectUrl, type Project } from '@/lib/projects';
+
+interface Props {
+	project: Project;
+	/** Spans two columns and sets the frame text larger. */
+	lead?: boolean;
+	/** The one slate-iris card on the page. */
+	accent?: boolean;
+	/** Load the screenshot eagerly; only for cards in the first viewport. */
+	eager?: boolean;
+}
+
+const { project, lead = false, accent = false, eager = false } = Astro.props;
+const { title, summary, org, dates, stack, cover, coverAlt } = project.data;
+---
+
+<article class:list={['card', { 'card-lead': lead, 'card-accent': accent }]}>
+	<div class="card-body">
+		<h3 class="card-title" style={`view-transition-name: p-${project.id};`}>
+			<a href={projectUrl(project)}>{title}</a>
+		</h3>
+		{cover && <p class="card-summary">{summary}</p>}
+		<p class="card-meta">{org} · {dates}</p>
+		{
+			stack.length > 0 && (
+				<ul class="tags" aria-label="Stack">
+					{stack.map((item) => (
+						<li class="tag">{item}</li>
+					))}
+				</ul>
+			)
+		}
+	</div>
+	<div class="card-frame">
+		{
+			cover ? (
+				<Picture
+					src={cover}
+					alt={coverAlt ?? ''}
+					formats={['avif', 'webp']}
+					widths={[480, 960, 1440]}
+					sizes={lead ? '(min-width: 75rem) 620px, 100vw' : '(min-width: 75rem) 300px, 100vw'}
+					loading={eager ? 'eager' : 'lazy'}
+					class="card-image"
+				/>
+			) : (
+				<p class="card-frame-text">{summary}</p>
+			)
+		}
+	</div>
+</article>
