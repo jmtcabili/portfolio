@@ -33,3 +33,12 @@ pnpm-debug.log*
 
 # résumé with personal contact details
 Cabili.pdf
+
+# wrangler local state
+.wrangler/
+
+# local notes, plans and agent skill lock
+PRODUCT.md
+plans/
+github.md
+skills-lock.json
