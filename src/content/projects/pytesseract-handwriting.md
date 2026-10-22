@@ -1,6 +1,6 @@
 ---
 title: PyTesseract on handwritten documents
-summary: A co-authored paper on how PyTesseract performs on handwritten documents, presented at the 2025 Philippine Computer Science Congress.
+summary: A co-authored paper on how PyTesseract performs on noisy scanned documents, presented at the 2025 Philippine Computer Science Congress.
 kind: research
 order: 1
 role: Research Apprentice
