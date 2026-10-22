@@ -38,7 +38,7 @@ const { title, summary, org, dates, stack, cover, coverAlt } = project.data;
 			cover ? (
 				<Picture
 					src={cover}
-					alt={coverAlt ?? ''}
+					alt={coverAlt ?? `Screenshot of ${title}`}
 					formats={['avif', 'webp']}
 					widths={[480, 960, 1440]}
 					sizes={lead ? '(min-width: 75rem) 620px, 100vw' : '(min-width: 75rem) 300px, 100vw'}

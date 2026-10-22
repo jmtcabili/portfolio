@@ -8,7 +8,7 @@ interface Props {
 
 const {
 	title,
-	description = 'Johan Marlo Cabili, full stack software engineer: experience, projects, stack and contact.',
+	description = 'Johan Marlo Cabili, full stack AI-native engineer: experience, projects, stack and contact.',
 } = Astro.props;
 
 const path = Astro.url.pathname;
@@ -18,7 +18,7 @@ const path = Astro.url.pathname;
 const siteUrl = Astro.site ?? new URL('https://jmtcabili.dev');
 const canonical = new URL(path, siteUrl).href;
 const ogImage = new URL('/og.jpg', siteUrl).href;
-const ogImageAlt = 'Johan Marlo Cabili, Full Stack Software Engineer, with a portrait photo';
+const ogImageAlt = 'Johan Marlo Cabili, Full Stack AI-native Engineer, with a portrait photo';
 const personJsonLd =
 	path === '/'
 		? JSON.stringify({
@@ -33,7 +33,7 @@ const personJsonLd =
 						'@type': 'Person',
 						name: 'Johan Marlo Cabili',
 						alternateName: 'Johan Cabili',
-						jobTitle: 'Full Stack Software Engineer',
+						jobTitle: 'Full Stack AI-native Engineer',
 						url: siteUrl.href,
 						image: new URL('/og.jpg', siteUrl).href,
 						email: 'jmtcabili@gmail.com',
@@ -54,6 +54,8 @@ const navItems = [
 	{ href: '/#stack', label: 'Stack' },
 	{ href: '/projects/', label: 'Projects', current: onProjects },
 	{ href: '/#contact', label: 'Contact' },
+	// Downloads the PDF instead of opening it; the label says it is a file.
+	{ href: '/johan-marlo-cabili-resume.pdf', label: 'Résumé (PDF)', download: 'Johan-Marlo-Cabili-Resume.pdf' },
 ];
 ---
 
@@ -61,7 +63,7 @@ const navItems = [
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="light dark" />
 		<script is:inline>
 			// Runs before first paint so a saved theme never flashes the other one.
@@ -72,8 +74,10 @@ const navItems = [
 			} catch {}
 		</script>
 		<meta name="generator" content={Astro.generator} />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<!-- Favicons follow the system theme through media queries. When the visitor picks a theme with
+		     the toggle, the toggle script points both links at that theme's icon (see syncFavicon below). -->
+		<link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" data-favicon />
+		<link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" data-favicon />
 		<link rel="preload" href="/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="preload" href="/fonts/major-mono-display-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
@@ -108,6 +112,7 @@ const navItems = [
 								<li>
 									<a
 										href={item.href}
+										download={item.download}
 										aria-current={item.current ? 'page' : undefined}
 									>
 										{item.label}
@@ -136,9 +141,7 @@ const navItems = [
 				<p>© {new Date().getFullYear()} Johan Marlo Cabili</p>
 				<p>
 					<a href="mailto:jmtcabili@gmail.com">Email jmtcabili@gmail.com</a>
-					<span aria-hidden="true">·</span>
 					<a href="https://github.com/jmtcabili">GitHub jmtcabili</a>
-					<span aria-hidden="true">·</span>
 					<a href="https://www.linkedin.com/in/jmtcabili/">LinkedIn jmtcabili</a>
 				</p>
 			</footer>
@@ -154,9 +157,20 @@ const navItems = [
 				const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 				const device = () => (systemDark.matches ? 'dark' : 'light');
 				const current = () => root.dataset.theme || device();
+				// A saved choice overrides the system theme, so both favicon links show that theme's icon.
+				// With no saved choice, each link keeps its own file and media query and the system decides.
+				const syncFavicon = () => {
+					const chosen = root.dataset.theme;
+					document.querySelectorAll('link[data-favicon]').forEach((link) => {
+						const own = link.media.includes('dark') ? 'dark' : 'light';
+						link.dataset.own ??= own;
+						link.href = `/favicon-${chosen ?? link.dataset.own}.ico`;
+					});
+				};
 				const render = () => {
 					const next = current() === 'dark' ? 'light' : 'dark';
 					button.setAttribute('aria-label', `Switch to ${next} theme`);
+					syncFavicon();
 				};
 				// The device setting is the default. A saved choice exists only while it differs from the device,
 				// so switching back to the device's theme forgets it and the site follows the device again.

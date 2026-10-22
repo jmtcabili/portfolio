@@ -2,7 +2,8 @@
 // Fallback skeleton rendered instantly while GitHub stats are deferred and streamed in
 ---
 
-<div class="hero-github-skeleton" aria-busy="true" aria-label="Loading GitHub statistics">
+<div class="hero-github-skeleton" role="status">
+  <span class="sr-only">Loading GitHub statistics</span>
   <div class="skeleton-stats">
     <div class="skeleton-stat">
       <span class="skeleton-label"></span>
@@ -78,6 +79,7 @@
   .skeleton-detail {
     display: inline-block;
     width: 120px;
+    max-width: 100%;
     height: 12px;
     background-color: var(--heat-0);
     animation: skeleton-pulse 1.8s ease-in-out infinite;
@@ -92,7 +94,8 @@
   .skeleton-badge {
     display: inline-block;
     width: 100px;
-    height: 32px;
+    /* Same height as the loaded badges (44px touch targets). */
+    height: var(--target);
     background-color: var(--heat-0);
     border: 1px solid var(--heat-0);
     animation: skeleton-pulse 1.8s ease-in-out infinite;

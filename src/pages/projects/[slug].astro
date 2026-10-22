@@ -50,7 +50,7 @@ const { Content } = await render(project);
 				<div class="project-cover">
 					<Picture
 						src={cover}
-						alt={coverAlt ?? ''}
+						alt={coverAlt ?? `Screenshot of ${title}`}
 						formats={['avif', 'webp']}
 						widths={[640, 1200, 1800]}
 						sizes="(min-width: 75rem) 1158px, 100vw"
@@ -131,6 +131,10 @@ const { Content } = await render(project);
 			<li class="row">
 				<p class="row-date">Index</p>
 				<a class="row-meta-col row-title" href="/projects/">All projects</a>
+			</li>
+			<li class="row">
+				<p class="row-date">Contact</p>
+				<a class="row-meta-col row-title" href="mailto:jmtcabili@gmail.com">Email jmtcabili@gmail.com</a>
 			</li>
 		</ul>
 	</nav>

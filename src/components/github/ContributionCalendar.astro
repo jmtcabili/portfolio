@@ -65,14 +65,15 @@ const visibleMonthLabels = monthLabels.filter(
 ---
 
 <figure class="heatmap">
-	<div class="grid" style={`--weeks: ${weeks.length};`}>
+	<!-- Visual only: the caption below states the total, and per-day details show on hover as a visual aid. -->
+	<div class="grid" style={`--weeks: ${weeks.length};`} aria-hidden="true">
 		{visibleMonthLabels.map((label) => (
 			<span class="month" style={`grid-column: ${label.column}; grid-row: 1;`}>{label.name}</span>
 		))}
 		{
 			cells.map((cell) => (
 				<span class={`day heat-${cell.level}`} style={`grid-column: ${cell.column}; grid-row: ${cell.row};`}>
-					<span class="tip" role="tooltip">{cell.tip}</span>
+					<span class="tip">{cell.tip}</span>
 				</span>
 			))
 		}
@@ -189,7 +190,8 @@ const visibleMonthLabels = monthLabels.filter(
 		height: 12px;
 	}
 
-	/* Wide screens: fixed 10px cells, as on GitHub. Narrow screens: cells share the width. */
+	/* Fixed 10px cells, as on GitHub. The grid is about 634px wide, which fits the full-width hero
+	   column from 48rem; below that the heatmap is hidden. Keep this in step with where the block sits. */
 	@media (min-width: 48rem) {
 		.grid {
 			grid-template-columns: repeat(var(--weeks), 10px);

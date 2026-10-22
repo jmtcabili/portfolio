@@ -114,6 +114,7 @@ const streakRange = (() => {
 	.badge {
 		display: inline-flex;
 		align-items: center;
+		min-height: var(--target);
 		gap: var(--space-10);
 		padding: var(--space-5) var(--space-10);
 		border: 1px solid var(--ink);
@@ -139,7 +140,7 @@ const streakRange = (() => {
 		border: 1px solid var(--fossil);
 	}
 
-	/* Wide screens: three cards in one row, with more room for the badges. */
+	/* Wide screens: three cards in one row. */
 	@media (min-width: 48rem) {
 		.stats {
 			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);

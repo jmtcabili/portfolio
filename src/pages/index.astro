@@ -56,7 +56,7 @@ const experience = [
 const stack = [
 	{ label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'SQL', 'Java', 'C', 'C++'] },
 	{ label: 'Web', items: ['Next.js', 'React', 'Tailwind CSS', 'Node.js', 'Express.js', 'PHP'] },
-	{ label: 'Data', items: ['PostgreSQL', 'MySQL', 'Supabase', 'MongoDB', 'Azure Databricks', 'Pandas', 'Google Sheets'] },
+	{ label: 'Data', items: ['PostgreSQL', 'MySQL', 'Supabase', 'MongoDB', 'Azure Databricks', 'Pandas'] },
 	{ label: 'AI workflows', items: ['MCP servers', 'Tool-calling agents', 'LLM labelling', 'Claude Code', 'Antigravity'] },
 	{ label: 'Tools', items: ['Git', 'GitHub', 'Docker', 'Bash', 'Postman', 'Figma'] },
 ];
@@ -67,27 +67,21 @@ const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.
 
 ---
 
-<Layout title="Johan Marlo Cabili · Full Stack Software Engineer">
+<Layout title="Johan Marlo Cabili · Full Stack AI-native Engineer">
 	<section class="hero" aria-labelledby="intro">
-		<div class="hero-identity">
-			<img
-				class="hero-portrait"
-				src="/portrait.avif"
-				width="1878"
-				height="2850"
-				alt="Portrait of Johan Marlo Cabili"
-				fetchpriority="high"
-			/>
-			<p class="display-mono hero-wordmark" aria-hidden="true">jmt<span class="wordmark-caret">_</span></p>
-		</div>
-		<div>
+		<img
+			class="hero-portrait"
+			src="/portrait.avif"
+			width="1878"
+			height="2850"
+			alt="Portrait of Johan Marlo Cabili"
+			fetchpriority="high"
+		/>
+		<div class="hero-copy">
 			<h1 id="intro" class="display">Johan Marlo Cabili</h1>
-			<p class="heading hero-role">Full-stack AI-native Engineer</p>
+			<p class="heading hero-role">Full Stack AI-native Engineer</p>
 			<p class="subheading muted hero-lede">
 				I ship production-ready systems with AI-native workflows, from data pipelines to live web products.
-			</p>
-			<p class="hero-actions">
-				<a class="button" href="#contact">Get in touch</a>
 			</p>
 			<div id="github" class="hero-github-section">
 				<h2 class="caption muted hero-github-heading">GitHub activity</h2>
@@ -95,6 +89,9 @@ const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.
 					<CalendarSkeleton slot="fallback" />
 				</GithubIsland>
 			</div>
+			<p class="hero-actions">
+				<a class="button" href="#contact">Get in touch</a>
+			</p>
 		</div>
 	</section>
 
@@ -155,8 +152,6 @@ const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.
 		</div>
 	</section>
 
-
-
 	<section class="section" id="projects" aria-labelledby="projects-heading">
 		<h2 id="projects-heading">Projects</h2>
 		<div class="section-body">
@@ -194,8 +189,12 @@ const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.
 			<p class="contact-line">
 				<a href="mailto:jmtcabili@gmail.com">jmtcabili@gmail.com</a>
 			</p>
+			<ul class="contact-links">
+				<li><a href="/johan-marlo-cabili-resume.pdf">Résumé (PDF)</a></li>
+				<li><a href="https://www.linkedin.com/in/jmtcabili/">LinkedIn jmtcabili</a></li>
+			</ul>
 			<p class="muted contact-note">
-				Open to AI engineering roles and startup work. Email is the fastest way to reach me.
+				Open to full stack AI-native engineering roles and startup work. Email is the fastest way to reach me.
 			</p>
 		</div>
 	</section>
