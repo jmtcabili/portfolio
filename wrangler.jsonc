@@ -6,7 +6,9 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist",
+    // Serve the prerendered 404 page (src/pages/404.astro) for unknown paths, as the Astro Cloudflare guide advises.
+    "not_found_handling": "404-page"
   },
   "observability": {
     "enabled": true

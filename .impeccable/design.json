@@ -131,7 +131,7 @@
       "Don't round corners. The portrait circle and the 4px skip link are the only exceptions.",
       "Don't use slate-iris for body text, borders or decoration, or fossil for any text.",
       "Don't set Major Mono Display anywhere but the header jmt_ logo.",
-      "Don't add routes beyond the three page types, a hamburger menu, a sticky header or a left rail.",
+      "Don't add routes beyond the three page types and the 404 page, a hamburger menu, a sticky header or a left rail.",
       "Don't add a third theme, or give a component its own dark-mode colours.",
       "Don't embed third-party scripts, widgets or stats images. Render GitHub data as HTML text.",
       "Don't add an animation library, or animate layout properties, filter or blur.",

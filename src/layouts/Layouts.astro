@@ -4,11 +4,14 @@ import '../styles/global.css';
 interface Props {
 	title: string;
 	description?: string;
+	/** Keeps the page out of search results and drops its canonical link (used by the 404 page). */
+	noindex?: boolean;
 }
 
 const {
 	title,
 	description = 'Johan Marlo Cabili, full stack AI-native engineer: experience, projects, stack and contact.',
+	noindex = false,
 } = Astro.props;
 
 const path = Astro.url.pathname;
@@ -82,7 +85,7 @@ const navItems = [
 		<link rel="preload" href="/fonts/major-mono-display-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<link rel="canonical" href={canonical} />
+		{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 		<link rel="sitemap" href="/sitemap-index.xml" />
 		<meta property="og:site_name" content="Johan Marlo Cabili" />
 		<meta property="og:title" content={title} />

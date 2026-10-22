@@ -121,13 +121,14 @@ A static, text-first portfolio styled after the Swiss editorial look of spacelab
 
 The visitor is evaluating, often on a phone, often for under a minute. The first mobile screen must show the name and the role. GitHub activity follows in the hero as live proof, then "Get in touch", then experience, stack, projects and contact.
 
-The site has three kinds of page and no others:
+The site has three kinds of page, plus a 404 page, and no others:
 
 | Page | Purpose |
 | --- | --- |
 | `/` | The whole portfolio: hero, About, Experience, Stack, GitHub, featured Projects, Contact |
 | `/projects/` | Index of every project, filterable by kind |
 | `/projects/<slug>/` | One project write-up |
+| `/404` | Not-found page: a large "404", a plain one-line message, hairline rows to Home, Projects, Contact and the résumé, then the featured projects. `noindex`, no canonical, left out of the sitemap |
 
 **Key Characteristics:**
 
@@ -373,12 +374,12 @@ Lines are always 1px, except the 2px focus outline and the 2px underline on the 
 
 ### Contact
 
-- The email as a 30px heading-size link. Beside it, text links to the résumé PDF and LinkedIn. Below them, a short note in `ink-muted`.
-- Write-ups end with a contact line under "More projects".
+- The email as a 30px heading-size `mailto:` link. Below it, text links to the résumé PDF and LinkedIn, then a short note in `ink-muted`.
+- Write-ups and the 404 page end with a Contact row: an email `mailto:` link.
 
 ### Footer
 
-- A hairline, then the copyright and text links to Email, GitHub and LinkedIn, each at least 44px tall.
+- A hairline, then the copyright and text links to Email (`mailto:`), GitHub and LinkedIn, each at least 44px tall.
 
 ## Do's and Don'ts
 
@@ -399,7 +400,7 @@ Lines are always 1px, except the 2px focus outline and the 2px underline on the 
 - **Don't** round corners. The portrait circle and the 4px skip link are the only exceptions.
 - **Don't** use `slate-iris` for body text, borders or decoration, or `fossil` for any text.
 - **Don't** set Major Mono Display anywhere but the header `jmt_` logo.
-- **Don't** add routes beyond the three page types, a hamburger menu, a sticky header or a left rail.
+- **Don't** add routes beyond the three page types and the 404 page, a hamburger menu, a sticky header or a left rail.
 - **Don't** add a third theme, or give a component its own dark-mode colours.
 - **Don't** embed third-party scripts, widgets or stats images. Render GitHub data as HTML text.
 - **Don't** add an animation library, or animate layout properties, filter or blur.

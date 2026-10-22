@@ -1121,3 +1121,10 @@ a.row-title,
 		transform: scale(0.97);
 	}
 }
+
+/* ---------- 404 ---------- */
+
+.not-found-title {
+	margin-top: var(--space-21);
+	text-wrap: balance;
+}

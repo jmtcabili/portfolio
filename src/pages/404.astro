@@ -1,0 +1,67 @@
+---
+import Layout from '@/layouts/Layouts.astro';
+import { getProjects, groupByKind, projectUrl } from '@/lib/projects';
+
+// Same featured set as the home page: the lead project of each kind.
+const allProjects = await getProjects();
+const featuredProjects = groupByKind(allProjects).map((group) => ({ kind: group.label, project: group.projects[0] }));
+
+const destinations = [
+	{ label: 'Home', href: '/', text: 'Johan Marlo Cabili, home page' },
+	{ label: 'Projects', href: '/projects/', text: `All ${allProjects.length} projects` },
+	{ label: 'Contact', href: 'mailto:jmtcabili@gmail.com', text: 'Email jmtcabili@gmail.com' },
+	{ label: 'Résumé', href: '/johan-marlo-cabili-resume.pdf', text: 'Download résumé (PDF)', download: 'Johan-Marlo-Cabili-Resume.pdf' },
+];
+---
+
+<Layout
+	title="Page not found · Johan Marlo Cabili"
+	description="This page doesn't exist. Find Johan Marlo Cabili's projects, résumé and contact details instead."
+	noindex
+>
+	<header class="page-head">
+		<p class="page-head-count">Error</p>
+		<div>
+			<h1 class="display not-found-code">404<span class="sr-only">: page not found</span></h1>
+			<p class="heading not-found-title">This page isn't here.</p>
+			<p class="subheading muted page-head-lede">
+				The link may be old or mistyped. Everything on the site is one step away below.
+			</p>
+		</div>
+	</header>
+
+	<nav class="section" aria-labelledby="go-heading">
+		<h2 id="go-heading">Where to go</h2>
+		<ul class="section-body rows">
+			{
+				destinations.map((item) => (
+					<li class="row">
+						<p class="row-date">{item.label}</p>
+						<a class="row-meta-col row-title" href={item.href} download={item.download}>
+							{item.text}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<section class="section" aria-labelledby="featured-heading">
+		<h2 id="featured-heading">Maybe you were looking for</h2>
+		<div class="section-body rows">
+			{
+				featuredProjects.map(({ kind, project }) => (
+					<article class="row">
+						<p class="row-date">{kind}</p>
+						<div class="row-meta-col">
+							<h3 class="row-title">
+								<a href={projectUrl(project)}>{project.data.title}</a>
+							</h3>
+							<p class="row-summary">{project.data.summary}</p>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Layout>
