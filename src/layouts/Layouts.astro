@@ -79,6 +79,9 @@ const navItems = [
 		<meta name="generator" content={Astro.generator} />
 		<!-- Favicons follow the system theme through media queries. When the visitor picks a theme with
 		     the toggle, the toggle script points both links at that theme's icon (see syncFavicon below). -->
+		<!-- Plain icon with no media query, for Google Search and other crawlers that ignore media queries.
+		     Browsers use the later themed links below when one matches. -->
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" data-favicon />
 		<link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" data-favicon />
 		<link rel="preload" href="/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
