@@ -1,6 +1,6 @@
 ---
-name: Johan's AI Engineer Portfolio
-description: A Swiss-editorial, static, text-first portfolio system. White paper, black hairlines, one typeface for text, one display face for the logo and hero, one slate-violet accent. Speed, SEO and crawlability outrank visual ambition.
+name: Johan Marlo Cabili Portfolio
+description: A Swiss-editorial, static, text-first portfolio. White paper, black hairlines, square corners, one typeface for text, one display face for the wordmark, one slate-violet accent. Speed, SEO and crawlability outrank visual ambition.
 colors:
   paper: "#ffffff"
   ink: "#000000"
@@ -11,6 +11,7 @@ colors:
   on-slate-iris: "#ffffff"
   rule: "#000000"
   focus: "#495472"
+  link-hover: "#495472"
   heat-0: "#eceeeb"
   heat-1: "#b2b4b1"
   heat-2: "#6f716e"
@@ -33,13 +34,13 @@ typography:
     fontFamily: Hanken Grotesk
     fontSize: 21px
     fontWeight: 400
-    lineHeight: 1.15
+    lineHeight: 1.2
     letterSpacing: 0.011em
   subheading:
     fontFamily: Hanken Grotesk
     fontSize: 19px
     fontWeight: 400
-    lineHeight: 1.15
+    lineHeight: 1.3
     letterSpacing: 0.011em
   body:
     fontFamily: Hanken Grotesk
@@ -51,13 +52,8 @@ typography:
     fontFamily: Hanken Grotesk
     fontSize: 15px
     fontWeight: 400
-    lineHeight: 1.2
+    lineHeight: 1.3
     letterSpacing: 0.011em
-  display-mono:
-    fontFamily: Major Mono Display
-    fontSize: 62px
-    fontWeight: 400
-    lineHeight: 1
   logo:
     fontFamily: Major Mono Display
     fontSize: 21px
@@ -66,6 +62,7 @@ typography:
 rounded:
   none: 0px
   utility: 4px
+  portrait: 50%
 spacing:
   space-5: 5px
   space-10: 10px
@@ -73,17 +70,6 @@ spacing:
   space-42: 42px
   space-84: 84px
   space-147: 147px
-layout:
-  container: 1200px
-  rail: 200px
-  prose: 68ch
-motion:
-  ease-out: "cubic-bezier(0.23, 1, 0.32, 1)"
-  ease-in-out: "cubic-bezier(0.77, 0, 0.175, 1)"
-  duration-press: 160ms
-  duration-fade: 200ms
-  duration-reveal: 250ms
-  duration-page: 280ms
 components:
   button:
     backgroundColor: "{colors.slate-iris}"
@@ -93,7 +79,7 @@ components:
     padding: 21px
   button-hover:
     backgroundColor: "{colors.ink}"
-    textColor: "{colors.on-slate-iris}"
+    textColor: "{colors.paper}"
   card:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -107,58 +93,127 @@ components:
   tag:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
+    typography: "{typography.caption}"
     rounded: "{rounded.none}"
     padding: 5px 10px
+  filter-chip:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.none}"
+    padding: 10px 21px
+    height: 44px
+  filter-chip-active:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+  portrait:
+    rounded: "{rounded.portrait}"
+    width: 200px
 ---
 
-# Johan's Portfolio design system
+# Design System: Johan Marlo Cabili Portfolio
 
 ## Overview
 
-A static, text-first system for a personal portfolio, styled after the Swiss editorial look of spacelab.co.uk: white paper, black hairlines, square corners, no shadows. When a design choice costs bytes, requests or JavaScript, drop the choice.
+**Creative North Star: "The Hairline Index"**
+
+A static, text-first portfolio styled after the Swiss editorial look of spacelab.co.uk: white paper, black 1px hairlines, square corners, no shadows. Content is organised as an index of hairline rows, with a 200px label column on the left and the content on the right from 48rem. When a design choice costs bytes, requests or JavaScript, drop the choice.
+
+The visitor is evaluating, often on a phone, often for under a minute. The first mobile screen must show the name and the role. GitHub activity follows in the hero as live proof, then "Get in touch", then experience, stack, projects and contact.
 
 The site has three kinds of page and no others:
 
 | Page | Purpose |
 | --- | --- |
 | `/` | The whole portfolio: hero, About, Experience, Stack, GitHub, featured Projects, Contact |
-| `/projects/` | Index of every project |
+| `/projects/` | Index of every project, filterable by kind |
 | `/projects/<slug>/` | One project write-up |
 
-Home-page section order: hero, `#about`, `#experience`, `#stack`, `#github`, `#projects`, `#contact`.
+**Key Characteristics:**
 
-Principles:
-
+- Organise with lines, not fills or extra space: blocks are separated by a 1px `rule` hairline.
+- One chromatic colour, used sparingly. Everything else is ink on paper.
 - Ship HTML and CSS. Add JavaScript only when a feature cannot work without it, and write the reason next to the code.
-- Give every page its own URL, with its full content in the server-rendered HTML.
-- Use tokens, never literals.
-- Organise with lines, not space or fills: separate blocks with a 1px `rule` hairline.
-- Move things only with a named purpose: feedback, spatial continuity, a change of state, softening a jarring swap, or a rare one-time moment of delight. Motion stays inside the budget in Motion and Performance and SEO.
+- Every page has its own URL with its full content in the server-rendered HTML.
+- Tokens, never literals.
+- Move things only with a named purpose (see Motion below).
+
+### Motion
+
+Motion is allowed when it has a named purpose (feedback, spatial continuity, a change of state, softening a jarring swap, or a rare one-time moment of delight) and costs next to nothing. If an effect needs a library, a media file or more than a few lines of JavaScript, drop it. Motion tokens live in `global.css` and in `.impeccable/design.json`.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Anything entering or responding to input |
+| `ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Something moving from one place on screen to another |
+| `duration-press` | 160ms | Press feedback |
+| `duration-fade` | 200ms | Fades and the page cross-fade |
+| `duration-reveal` | 250ms | Content arriving, such as the GitHub island |
+| `duration-page` | 280ms | Shared elements in a page transition |
+
+Rules:
+
+- Keep UI motion under 300ms. Use `ease-out` for entering elements; never `ease-in` on UI. Never scale from 0; start at 0.95 to 0.97.
+- CSS only by default: transitions, `@keyframes`, `@starting-style`, scroll-driven animations and native cross-document View Transitions. No animation libraries, no Astro `ClientRouter`, no video, GIF or Lottie.
+- Animate only `transform` and `opacity`.
+- Motion must not delay the h1 or shift layout (CLS 0.1 or less). Wrap enhancements in `@supports` so unsupported browsers show the final state.
+- Not allowed on: body text, data being read (heatmap, stats), anything keyboard-triggered or repeated many times per visit, card hover lift or zoom, reveal-on-scroll for home-page sections.
+- Every animation has a `prefers-reduced-motion: reduce` fallback (opacity only, or none). Hover-only motion goes inside `@media (hover: hover) and (pointer: fine)`. Nothing loops forever except the loading skeleton's pulse, which stops under reduced motion.
+
+Approved uses:
+
+| Element | Motion |
+| --- | --- |
+| GitHub stats when the server island arrives | Opacity fade via `@starting-style`, `duration-reveal` |
+| Project card title to write-up h1 | Cross-document View Transition, one `view-transition-name` per project; the rest of the page fades |
+| In-page nav anchors | `scroll-behavior: smooth` under no-preference; sections get `scroll-margin-top: space-21` |
+| `/projects/` filter | The targeted section fades in; hiding stays instant |
+| `/projects/` cards | Scroll-driven entrance, opacity plus `translateY(12px)`, inside `@supports (animation-timeline: view())` |
+| Button | `:active { transform: scale(0.97) }`, `duration-press` |
+| Theme switch | View Transition cross-fade, except under reduced motion |
+
+### Performance and SEO
+
+| Metric | Limit |
+| --- | --- |
+| Largest Contentful Paint | 2.5 s or less |
+| Interaction to Next Paint | 200 ms or less |
+| Cumulative Layout Shift | 0.1 or less |
+| Lighthouse Performance, mobile | 95 or more |
+| Transferred per page, excluding images | 100 KB or less |
+| Client JavaScript | 0 KB by default; 10 KB or less with a written reason |
+| Font files | 2 woff2, 30 KB or less in total |
+| Third-party requests | 0 |
+
+Prerendered HTML from Astro, with the GitHub server island as the only on-demand part. AVIF with WebP fallback for images. For SEO: semantic landmarks, one h1 per page, a canonical URL on `jmtcabili.dev`, Open Graph and Twitter tags with `/og.jpg`, a sitemap and `robots.txt`, and `Person` JSON-LD on `/`. Page titles:
+
+- Home: `Johan Marlo Cabili · Full Stack AI-native Engineer`
+- Other pages: `<Page> · Johan Marlo Cabili`
+
+The role is written **Full Stack AI-native Engineer** everywhere: titles, link previews, structured data, the hero and the contact note.
 
 ## Colors
 
-- **paper** `#ffffff`: page canvas and card surface.
-- **ink** `#000000`: primary text, logo, active nav item, hairlines, tag outlines.
-- **charcoal** `#2c2222`: dates, organisations and captions (15:1 on paper).
-- **ink-muted** `#6f716e`: inactive nav items and tertiary meta (4.9:1 on paper).
-- **fossil** `#b2b4b1`: decoration only (2.1:1 on paper). Never text, links or any mark that carries meaning.
-- **slate-iris** `#495472`: the only chromatic colour. Fills the primary button and the one accent card per screen. Link hover uses `link-hover`, which matches it in light. White text on it is 7.5:1.
-- **focus** `#495472`: the 2px focus outline. On an accent card it becomes `paper`.
-- **heat-0 to heat-4**: five neutral steps for the contribution heatmap and the activity bars (`#eceeeb`, fossil, ink-muted, `#383a37`, ink).
+Ink on paper, with one slate-violet accent that appears at most once or twice per screen.
 
-- **link-hover** `#495472`: the text colour of a link on hover. It equals slate-iris in light and is lighter in dark, where slate-iris is too dim for text.
+### Primary
 
-No second hue, gradient or overlay.
+- **Slate Iris** (`slate-iris`): the only chromatic colour. Fills the primary button and the one accent card on `/projects/`, and is the text-selection colour. White text on it is 7.5:1. Never body text, borders or decoration.
+
+### Neutral
+
+- **Paper** (`paper`): page canvas and card surface.
+- **Ink** (`ink`): primary text, logo, active nav item, hairlines, tag and card outlines, filled states (button hover, active filter chip, tooltip).
+- **Charcoal** (`charcoal`): dates, organisations, captions and meta (15:1 on paper).
+- **Ink Muted** (`ink-muted`): inactive nav items, the theme toggle at rest, subheadings and secondary notes (4.9:1 on paper).
+- **Fossil** (`fossil`): decoration only (2.1:1). Never text, links or any mark that carries meaning.
+- **Rule** (`rule`): the 1px hairline. Same value as ink.
+- **Focus** (`focus`) and **Link Hover** (`link-hover`): the 2px focus outline and link hover text. They equal slate-iris in light and turn lighter in dark, where slate-iris is too dim for text.
+- **Heat 0–4** (`heat-0` to `heat-4`): five neutral steps for the contribution heatmap and the loading skeleton.
 
 ### Dark theme
 
-The site has a light and a dark theme with the same tokens and different values. It follows the visitor's system setting (`prefers-color-scheme`). An icon button at the end of the header overrides it: a moon in the light theme and a sun in the dark theme, showing the theme a click switches to. CSS swaps the icons with the same selectors as the theme tokens, so the right one shows on first paint. The button's `aria-label` ("Switch to dark theme" or "Switch to light theme") names the action, and each icon has `role="img"` and a `<title>` ("Moon", "Sun"). The icon is `ink-muted` at rest and `ink` on hover, with no underline.
-
-The device setting is always the default. A choice is saved in `localStorage` only while it differs from the device:
-
-- Switching back to the device's theme forgets the saved choice.
-- A saved choice that matches the device on page load is forgotten.
-- When the device changes theme while the page is open (for example, automatic dark mode at sunset), the site follows it and drops any saved choice.
+Same tokens, different values. The site follows `prefers-color-scheme`. A 44px icon button at the end of the header overrides it: a moon in light and a sun in dark, showing the theme a click switches to. Its `aria-label` names the action ("Switch to dark theme"), each icon has `role="img"` and a `<title>`. The choice is saved in `localStorage` only while it differs from the device, and is dropped when the device changes theme.
 
 | Token | Light | Dark | Notes for dark |
 | --- | --- | --- | --- |
@@ -171,162 +226,182 @@ The device setting is always the default. A choice is saved in `localStorage` on
 | focus, link-hover | `#495472` | `#a7b2d8` | 9.2:1 |
 | heat-0 to heat-4 | `#eceeeb` to `#000000` | `#1b1c1b`, `#3a3c39`, `#6f716e`, `#b2b4b1`, `#eceeeb` | More contributions are brighter |
 
-Rules:
+### Named Rules
 
-- Components use tokens only, so they work in both themes without their own dark styles. Never hard-code a colour.
-- Ink-filled elements (button hover, active filter chip, heatmap tooltip) set their text in `paper`, never in `on-slate-iris`, so they stay readable when ink turns light.
-- The dark values appear twice in `global.css`: once under the media query and once under `:root[data-theme="dark"]`. Keep both in sync.
-- An inline script in `<head>` applies a saved theme before first paint, so the page never flashes the other theme. Without JavaScript, the toggle stays hidden and the system setting still applies.
-- The switch cross-fades with a View Transition, except under reduced motion.
+**The One Hue Rule.** No second hue, gradient or overlay. The only exception is the heatmap skeleton's stripe pattern, which uses `heat-0`.
+
+**The Ink-Fill Rule.** Anything filled with ink sets its text in `paper`, never `on-slate-iris`, so it stays readable when ink turns light in dark mode.
+
+**The Twin Block Rule.** Dark values appear twice in `global.css`, under the media query and under `:root[data-theme="dark"]`. Keep both in sync. Components never carry their own dark-mode colours.
 
 ## Typography
 
-Two families, both self-hosted woff2 Latin subsets (about 29 KB together).
+**Text Font:** Hanken Grotesk (variable 300–600, with `system-ui` fallback)
+**Wordmark Font:** Major Mono Display (with Hanken Grotesk fallback)
 
-- **Hanken Grotesk** (variable, 300 to 600) sets all text. Headings and captions use weight 400, body uses weight 300.
-- **Major Mono Display** sets only the `jmt_` logo and the home hero. It is monocase, very wide (0.74em per character) and hairline-thin: never use it for nav items, labels, paragraphs or any size under 21px, and keep the hero text to 8 characters or fewer.
+**Character:** a neutral, slightly humanist grotesk at light weights carries every word; a hairline monocase display face appears only as the `jmt_` wordmark, so it reads as a signature, not a voice.
 
-Sizes are 15, 17, 19, 21, 30 and 62px only. Below 48rem, `display` and `display-mono` step down to 40px. Align text left, ragged right; never centre paragraphs.
+Both are self-hosted woff2 Latin subsets (about 29 KB together), preloaded. Major Mono Display uses `font-display: optional`; Hanken Grotesk uses `swap`.
 
-Usage: `display-mono` for the home h1, `display` for the h1 of `/projects/` and project pages, `heading` for h2 and stat values, `heading-sm` for h3, `subheading` for the first line under the h1, `caption` for meta, dates, tags and button labels.
+### Hierarchy
 
-Font loading: preload both files; `font-display: optional` for Major Mono Display, `swap` with a metric-adjusted fallback for Hanken Grotesk.
+- **Display** (400, 62px, 1.0): the h1 on every page, including the home name. Steps down to 40px below 48rem.
+- **Heading** (400, 30px, 1.1): h2 section headings, the hero role line, stat values, the contact email.
+- **Heading small** (400, 21px, 1.2): h3 row titles and card titles.
+- **Subheading** (400, 19px, 1.3): the first line under an h1 (hero lede, page lede).
+- **Body** (300, 17px, 1.3): paragraphs and list items. Prose is capped at 68ch.
+- **Caption** (400, 15px, 1.3): nav, dates, meta, tags, chips, button labels, footer.
+- **Logo** (400, 21px): the `jmt_` header wordmark.
+
+### Named Rules
+
+**The Six Sizes Rule.** Sizes are 15, 17, 19, 21, 30 and 62px only (40px is the mobile step of 62px). Nothing under 15px.
+
+**The Signature Rule.** Major Mono Display sets only the header `jmt_` logo. Never nav, labels, paragraphs or any size under 21px.
+
+**The Ragged Right Rule.** Align text left, ragged right. Never centre paragraphs. Use `text-wrap: balance` on headings and `pretty` on ledes.
 
 ## Layout
 
-From 48rem, two columns inside a 1200px container: a sticky 200px left rail with the logo and index nav, and the content on the right. Below 48rem the rail becomes a top header and the index wraps into rows. No hamburger menu, top bar on wide screens or sticky header.
+A single 1200px container with a 21px side gutter. A top header holds the wordmark, the index nav and the theme toggle above a hairline. There is no left rail, no hamburger menu and no sticky header.
 
-Spacing unit is 21px: `space-21` for card padding, gaps, button padding and the page gutter; `space-42` between a section heading and its content; `space-84` between sections and above the footer; `space-147` above the home headline. Prose is capped at 68ch.
+**Header.**
 
-Navigation items, in order: Home, About, Experience, Stack, GitHub, Projects, Contact. The section items are anchors written `/#about` and so on. Mark Home with `aria-current="page"` on `/` and Projects on `/projects/` and every project page; never mark an anchor.
+- From 48rem: one row, the wordmark on the left and the nav plus toggle on the right.
+- Below 48rem: two rows. The wordmark and toggle share row 1 and the nav wraps on the rows below.
+- Every nav link and the toggle are at least 44px tall. The header's vertical padding is `space-10`, because the 44px targets already supply the breathing room.
 
-## Elevation and depth
+**Sections.**
 
-None. No shadows, glows or blur. Depth comes from 1px hairlines and from the single filled accent card.
+- From 48rem: two columns, a 200px label column (h2, dates, row labels) and the content on the right. Rows use a 10rem date column.
+- Below 48rem: everything stacks in one column, with the date above the title.
 
-## Motion
+**Home hero.**
 
-Motion is allowed when it has a named purpose and costs next to nothing. If an effect needs a library, a media file or more than a few lines of JavaScript, drop the effect.
+- One column at every width, top to bottom: the round portrait, the name (h1), the role line, the lede (capped at 52ch), the GitHub activity block (caption heading "GitHub activity"), then the "Get in touch" button. No wordmark in the hero; the header carries `jmt_`.
+- Portrait: 147px from 48rem, 84px below. Space above the hero: `space-84` from 48rem, `space-42` below. The name and role must fit in a 390×660 viewport.
 
-Tokens. Use them, never literal values:
+**Home section order:** hero (with `#github` inside it), `#about`, `#experience`, `#stack`, `#projects`, `#contact`.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Anything entering or responding to input |
-| `ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Something moving from one place on screen to another |
-| `duration-press` | 160ms | Press feedback |
-| `duration-fade` | 200ms | Fades and the page cross-fade |
-| `duration-reveal` | 250ms | Content arriving, such as the GitHub island |
-| `duration-page` | 280ms | Shared elements in a page transition |
+**Spacing.** The unit is 21px:
 
-Budgets:
+| Token | Use |
+| --- | --- |
+| `space-5`, `space-10` | Gaps inside a component |
+| `space-21` | Card padding, row padding, gaps, button padding, gutter |
+| `space-42` | Between a heading and its content; mobile hero top |
+| `space-84` | Between sections, above the footer and above the home hero from 48rem |
 
-- Keep UI motion under 300ms: 100 to 160ms for press feedback, 125 to 200ms for tooltips, 200 to 300ms for fades and page transitions.
-- Use `ease-out` for entering elements. Never use `ease-in` on UI.
-- Never scale from 0. Start at 0.95 to 0.97.
+**Navigation:** Home, About, Experience, Stack, Projects, Contact, Résumé (PDF). Section items are anchors written `/#about`. The last item downloads the résumé (`download` attribute) and its label says it is a PDF. Mark Home with `aria-current="page"` on `/`, and Projects on `/projects/` and every write-up. Never mark an anchor.
 
-Keeping it light:
+**Touch targets.** Every link and button outside running prose is at least 44px tall:
 
-- CSS only by default: transitions, `@keyframes`, `@starting-style`, scroll-driven animations (`animation-timeline: view()`) and native cross-document View Transitions (`@view-transition { navigation: auto }`).
-- No animation libraries: no GSAP, Framer Motion, AOS, Lottie, Astro `ClientRouter` or similar.
-- JavaScript for motion only when CSS cannot do it. It counts toward the 10 KB client JavaScript cap, and the reason is written next to the code.
-- Animate only `transform` and `opacity`. Never animate layout properties (width, height, top, margin) or filter and blur. The one exception is the `jmt_` wordmark typewriter, which animates `clip-path` with `steps()` over 4 characters. It changes no layout.
-- No video, GIF or Lottie files for motion.
-- Set `will-change` only while an animation runs; never leave it on.
-- Motion must not delay the h1, the page's largest content, or shift layout. The CLS limit of 0.1 still applies.
-- Wrap enhancements in `@supports`, so a browser without support shows the final state.
+- Nav, footer and breadcrumb links, the toggle and chips get a `min-height` of 44px.
+- Row-title links and the contact email extend their hit area with padding and an equal negative margin, so the visual rhythm stays the same.
 
-Where motion is not allowed:
+### Named Rules
 
-- Body text and prose.
-- Data being read: the heatmap, stats figures and tables.
-- Anything triggered from the keyboard or repeated many times per visit.
-- Hover effects that lift or zoom cards.
-- Reveal-on-scroll for paragraphs, long text or the home page's sections.
+**The First Screen Rule.** On a 390×660 phone, the name and the role are visible without scrolling. "Get in touch" sits right after the GitHub block, and the Contact nav link is always one tap away.
 
-Accessibility:
+**The Container Rule.** Wide components (the heatmap, the card grid) size to their column, not the viewport. The heatmap uses fixed 10px cells (about 634px for 53 weeks), which fits the full-width hero from 48rem; below 48rem it is hidden. If the heatmap moves into a narrower column, raise that breakpoint so it never overflows.
 
-- Every animation respects `prefers-reduced-motion: reduce` with a gentler fallback (opacity only, or no motion), not only a switched-off one.
-- Hover-only motion goes inside `@media (hover: hover) and (pointer: fine)`.
-- Nothing blinks more than 3 times a second or loops forever. The loading skeleton's pulse is the one allowed loop, and it stops under reduced motion.
+## Elevation & Depth
 
-Approved uses:
+None. No shadows, glows or blur. Depth comes from 1px hairlines, the 1px outlines on cards and tags, and the single slate-iris accent card.
 
-| Element | Motion | Token |
-| --- | --- | --- |
-| GitHub stats, when the server island arrives | Opacity fade in via `@starting-style` | `duration-reveal`, `ease-out` |
-| Project card title to write-up h1 | Cross-document View Transition with one shared `view-transition-name` per project; the rest of the page fades | `duration-page` for the title, `duration-fade` for the page |
-| In-page nav anchors | `scroll-behavior: smooth` under `prefers-reduced-motion: no-preference`; sections get `scroll-margin-top: space-21` | None |
-| `jmt_` wordmark on `/` | Typewriter: `clip-path` with `steps(4)` over 320ms after a 150ms delay; the `_` blinks twice, then stays solid. The h1 name never animates | Values stated here; this is the only exception |
-| `/projects/` filter | The targeted section fades in; hiding stays instant | `duration-fade`, `ease-out` |
-| `/projects/` cards | Scroll-driven entrance, opacity plus `translateY(12px)`, inside `@supports (animation-timeline: view())` | `ease-out` |
-| Button | Optional `:active { transform: scale(0.97) }` | `duration-press`, `ease-out` |
+**The Flat Paper Rule.** If something needs to stand out, give it a hairline or the one accent fill, never a shadow.
 
 ## Shapes
 
-Every corner is square (`rounded.none`). `rounded.utility` (4px) is reserved for a rare utility element such as the skip link.
+Square by default (`rounded.none`). Two exceptions:
+
+- **The portrait** is a circle (`rounded.portrait`), cropped from the top of the photo so the face stays in frame. It is the only round shape on the site and the only photograph in the shell.
+- **Utility elements** such as the skip link may use 4px (`rounded.utility`).
+
+Lines are always 1px, except the 2px focus outline and the 2px underline on the current nav item.
 
 ## Components
 
-- **SiteShell:** skip link, left rail with the `jmt_` logo and index nav, content column, hairline footer. The `jmt_` wordmark types itself in on `/` (see Motion).
-- **Button:** the only filled control. Slate-iris fill, white caption text, ink on hover. May scale to 0.97 on press (see Motion).
-- **Tag:** square, 1px ink outline, 5px by 10px padding.
-- **ProjectCard:** square card with a 1px outline; one per screen may be the slate-iris accent card. The title link stretches over the card. The title carries into the write-up h1 as a page transition, and cards on `/projects/` enter on scroll (see Motion).
-- **Timeline:** hairline rows with a 10rem date column from 40rem.
-- **TechStack:** hairline rows grouped by category, 10rem label column from 40rem.
-- **Prose:** long-form text capped at 68ch.
-- **GithubStats:** repositories, stars, followers and a square language bar with a text legend. The stats fade in when the server island arrives (see Motion).
-- **StreakStats:** current streak, longest streak with dates, active days, total contributions.
-- **ContributionHeatmap:** 53 by 7 grid as one inline SVG of five paths, labelled months, Less to More legend.
-- **ActivityBreakdown:** commits, pull requests, issues and reviews with counts, shares and bars.
-- **WeekdayActivity:** average contributions per weekday and the busiest day.
-- **OrgList:** text links to organisations contributed to, most active first.
+### Buttons
 
-GitHub data is fetched on request, not at build time. The home page is prerendered, and the GitHub block (`GithubIsland`) is a server island (`server:defer`) rendered on demand by the Cloudflare adapter:
+- **Shape:** square (0px).
+- **Primary:** slate-iris fill, white 15px caption text, 21px padding. It is the only filled control.
+- **Hover:** ink fill with paper text. **Press:** scales to 0.97. **Focus:** 2px `focus` outline, offset 2px.
+- Home has two: "Get in touch" in the hero and "See all N projects" under Projects. Don't add more.
 
-- Two GraphQL calls, using `GITHUB_TOKEN`: one for the years with contributions, then one aliased query for every year plus the last 12 months.
-- Results are cached in memory for 10 minutes.
-- While the island loads, `CalendarSkeleton` holds its place. It must match the loaded block's size, so the swap causes no layout shift.
-- If the call fails, the island shows a plain-text fallback with a link to the GitHub profile.
-- The result is rendered as HTML text. The browser never calls GitHub; it only fetches the island from the site's own origin.
-- Crawlers get the skeleton in the initial HTML, not the figures, so the stats are not part of what search engines index.
+### Tags
 
-## Performance and SEO
+- Square, 1px ink outline, 5px by 10px padding, 15px caption. Static labels, not links.
 
-| Metric | Limit |
-| --- | --- |
-| Largest Contentful Paint | 2.5 s or less |
-| Interaction to Next Paint | 200 ms or less |
-| Cumulative Layout Shift | 0.1 or less |
-| Lighthouse Performance, mobile | 95 or more |
-| Transferred per page, excluding images | 100 KB or less |
-| Inline critical CSS | 14 KB or less |
-| Client JavaScript | 0 KB by default; 10 KB or less with a written reason, motion JavaScript included |
-| Font files | 2 woff2, 30 KB or less in total |
-| Third-party requests | 0 |
-| Animation libraries | 0 |
+### Filter chips (`/projects/`)
 
-Use prerendered HTML from Astro, with the GitHub server island as the only on-demand part, plus AVIF with WebP fallback, immutable hashed assets and Brotli. For SEO: semantic landmarks, one h1 per page, titles of the form `<Page> · Johan`, a canonical URL, Open Graph tags, a sitemap and robots file, JSON-LD `ProfilePage` and `Person` on `/`, and breadcrumb data on project pages. Render GitHub stats as real text, never as third-party image badges.
+- Links to section anchors. They work with CSS `:target` and no JavaScript.
+- Square, 1px ink outline, 10px by 21px padding, at least 44px tall, with the count in tabular figures.
+- **Active:** ink fill with paper text. "All" is active when nothing is targeted. **Hover:** underline.
+
+### Cards (`/projects/`)
+
+- **Corner style:** square. **Border:** 1px ink. **Background:** paper. **Padding:** 21px.
+- The title link stretches over the whole card. Focus outlines the card.
+- Cards with a screenshot show it in a 16:10 frame. Cards without one show the summary as 21px text.
+- Lead cards span two columns. The grid is one, two or three columns, measured on the content column with container queries.
+- **Accent card:** one per page, the first card on `/projects/`, filled slate-iris with white text and outlines.
+
+### Navigation
+
+- 15px caption, `ink-muted` at rest. Hover and current state: `ink` with a 2px underline.
+- Each link is at least 44px tall.
+- The theme toggle is a 44px square icon button: `ink-muted` at rest, `ink` on hover. The 20px sun and moon icons are hand-drawn inline SVG with a 1.5px stroke, square caps and miter joins.
+
+### Rows (Timeline, Stack, Projects on home, Details on write-ups)
+
+- Rows are separated by hairlines and have 21px vertical padding.
+- From 40rem, a 10rem label column (date, category or kind) sits on the left.
+- Experience rows: dates, role, organisation, then a bulleted list.
+- Stack rows: a category label and a wrap of tags.
+
+### GitHub section
+
+- A server island (`server:defer`) rendered on demand by the Cloudflare adapter, cached for 10 minutes. It is the only part of the page that isn't prerendered.
+- **Stats:** three outlined cards. Total commits and longest streak (with its dates) share a row on mobile. "Organisations contributed to" spans the full width below them, as outlined badge links with a 20px organisation logo and the name (each logo has alt text). From 48rem the three cards sit in one row.
+- **Contribution heatmap:**
+  - A grid of 53 weeks by 7 days with month labels, a "Less to More" legend and a caption that gives the total as text.
+  - It is decorative to assistive tech (`aria-hidden`) because the caption carries the meaning. Day details show on hover only, as a visual aid.
+  - It shows from 48rem.
+- **Loading:** a skeleton matches the loaded block's size, so the swap causes no layout shift. It is announced with `role="status"` and visually hidden text.
+- **Failure:** a plain-text fallback with a link to the GitHub profile.
+
+### Contact
+
+- The email as a 30px heading-size link. Beside it, text links to the résumé PDF and LinkedIn. Below them, a short note in `ink-muted`.
+- Write-ups end with a contact line under "More projects".
+
+### Footer
+
+- A hairline, then the copyright and text links to Email, GitHub and LinkedIn, each at least 44px tall.
 
 ## Do's and Don'ts
 
-Do:
-- Write in first person, plainly and specifically, in sentence case.
-- Write dates as `Jun 2025 – Present` and give links text that names the destination.
-- Give every image `width`, `height` and `alt`.
-- Keep the 2px focus outline on every interactive element.
-- Repeat chart figures as text so colour is never the only cue.
-- Give every animation a named purpose, a motion token and a `prefers-reduced-motion` fallback.
-- Animate only `transform` and `opacity`, in CSS.
+### Do:
 
-Don't:
-- Use icons, emoji, exclamation marks, gradients, shadows or a second hue. The one exception is the theme toggle's sun and moon: hand-drawn inline SVG, 1.5px stroke, square caps and miter joins, no fill.
-- Use `slate-iris` for body text, borders or decoration, or `fossil` for text.
-- Set Major Mono Display in nav, labels or paragraphs.
-- Add routes beyond the three pages or a hamburger menu.
-- Add a third theme, or give a component its own dark-mode colours instead of using tokens.
-- Embed third-party scripts, widgets or stats images.
-- Add an animation library or use video, GIF or Lottie for motion.
-- Animate layout properties, filter or blur, or leave `will-change` on.
-- Animate body text, data being read, or anything repeated many times per visit.
-- Lift or zoom cards on hover, or reveal paragraphs and home-page sections on scroll.
+- **Do** write in first person, plainly and specifically, in sentence case.
+- **Do** write dates as `Jun 2025 – Present` and give links text that names the destination.
+- **Do** give every image `width`, `height` and descriptive `alt` text. Never use an empty alt, even for a logo beside its label.
+- **Do** keep the 2px focus outline on every interactive element.
+- **Do** make every link and button outside running prose at least 44px tall.
+- **Do** repeat chart figures as text, so colour is never the only cue.
+- **Do** give every animation a named purpose, a motion token and a reduced-motion fallback.
+- **Do** check every page at 360, 390, 768 and 1280px with no horizontal scroll.
+
+### Don't:
+
+- **Don't** use icons, emoji, exclamation marks, gradients, shadows or a second hue. Exceptions: the sun and moon toggle icons, and the organisation logos in the GitHub badges.
+- **Don't** round corners. The portrait circle and the 4px skip link are the only exceptions.
+- **Don't** use `slate-iris` for body text, borders or decoration, or `fossil` for any text.
+- **Don't** set Major Mono Display anywhere but the header `jmt_` logo.
+- **Don't** add routes beyond the three page types, a hamburger menu, a sticky header or a left rail.
+- **Don't** add a third theme, or give a component its own dark-mode colours.
+- **Don't** embed third-party scripts, widgets or stats images. Render GitHub data as HTML text.
+- **Don't** add an animation library, or animate layout properties, filter or blur.
+- **Don't** lift or zoom cards on hover, or reveal paragraphs and home sections on scroll.
+- **Don't** use `role="tooltip"` on hover-only decorations.
