@@ -128,7 +128,7 @@ The site has three kinds of page, plus a 404 page, and no others:
 | `/` | The whole portfolio: hero, About, Experience, Stack, GitHub, featured Projects, Contact |
 | `/projects/` | Index of every project, filterable by kind |
 | `/projects/<slug>/` | One project write-up |
-| `/404` | Not-found page: a large "404", a plain one-line message, hairline rows to Home, Projects, Contact and the résumé, then the featured projects. `noindex`, no canonical, left out of the sitemap |
+| `/404` | Not-found page: a large "404", a plain one-line message, hairline rows to Home, Projects, Contact and the CV, then the featured projects. `noindex`, no canonical, left out of the sitemap |
 
 **Key Characteristics:**
 
@@ -293,7 +293,7 @@ A single 1200px container with a 21px side gutter. A top header holds the wordma
 | `space-42` | Between a heading and its content; mobile hero top |
 | `space-84` | Between sections, above the footer and above the home hero from 48rem |
 
-**Navigation:** Home, About, Experience, Stack, Projects, Contact, Résumé (PDF). Section items are anchors written `/#about`. The last item downloads the résumé (`download` attribute) and its label says it is a PDF. Mark Home with `aria-current="page"` on `/`, and Projects on `/projects/` and every write-up. Never mark an anchor.
+**Navigation:** Home, About, Experience, Stack, Projects, Contact, CV (PDF). Section items are anchors written `/#about`. The last item downloads the CV (`download` attribute) and its label says it is a PDF. Mark Home with `aria-current="page"` on `/`, and Projects on `/projects/` and every write-up. Never mark an anchor.
 
 **Touch targets.** Every link and button outside running prose is at least 44px tall:
 
@@ -374,7 +374,7 @@ Lines are always 1px, except the 2px focus outline and the 2px underline on the 
 
 ### Contact
 
-- The email as a 30px heading-size `mailto:` link. Below it, text links to the résumé PDF and LinkedIn, then a short note in `ink-muted`.
+- The email as a 30px heading-size `mailto:` link. Below it, text links to the CV PDF and LinkedIn, then a short note in `ink-muted`.
 - Write-ups and the 404 page end with a Contact row: an email `mailto:` link.
 
 ### Footer
